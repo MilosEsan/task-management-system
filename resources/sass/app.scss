@@ -1,0 +1,21 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+.fg-fix {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  textarea {
+    resize: none !important;
+  }
+
+  .modal-header {
+    display: flex !important;
+  }
