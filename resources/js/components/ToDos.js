@@ -73,6 +73,7 @@ export const ToDos = () => {
       axios.get(id ? `/api/todos/${id}` : '/api/todos')
       .then(res=> {
         setTodos(res.data)
+        console.log(res.data)
         if (!isEditing) {
           setTodoDetails(res.data.description); 
           setTodoName(res.data.title)
@@ -102,8 +103,7 @@ export const ToDos = () => {
   }, []);
 
   return (
-    <div style={openModal ? {display: 'none'} : null}>
-      <h3>ToDo Section</h3>
+    <div className='container' style={openModal ? {display: 'none'} : null}>
         <ul className="list mb-1">
           {todos.length ? todos.map(todo => (
             <li key={todo.id}>

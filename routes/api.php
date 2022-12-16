@@ -20,6 +20,15 @@ Route::post('todos', 'ToDoController@store');
 Route::put('todos/{id}', 'ToDoController@update');
 Route::delete('todos/{id}', 'ToDoController@delete');
 
+Route::get('transactions', 'TransactionController@index');
+Route::get('transactions/{id}', 'TransactionController@show');
+Route::post('transactions', 'TransactionController@store');
+Route::put('transactions/{id}', 'TransactionController@update');
+Route::delete('transactions/{id}', 'TransactionController@delete');
+
+Route::get('users', 'UserController@index');
+Route::get('users/{id}', 'UserController@show');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

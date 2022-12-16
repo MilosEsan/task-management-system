@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { createContext, useReducer } from 'react';
 import AppReducer from './AppReducer';
 
@@ -5,6 +6,12 @@ import AppReducer from './AppReducer';
 const initialState = {
   transactions: []
 }
+
+axios.get('/api/transactions') 
+.then(response=> {
+  initialState.transactions = response.data
+  console.log(initialState.transactions)
+})
 
 // Create context
 export const GlobalContext = createContext(initialState);

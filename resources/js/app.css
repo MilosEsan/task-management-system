@@ -109,6 +109,7 @@ input[type='number'] {
   list-style-type: none;
   padding: 0;
   margin-bottom: 40px;
+  width: 500px;
 }
 
 .list li {
@@ -186,4 +187,9 @@ textarea {
 
 .modal-header {
   display: flex !important;
+}
+
+.container-sm, .container {
+  max-width: 1320px;
+  height: 100vh;
 }
