@@ -21,8 +21,7 @@ Artisan::command('inspire', function () {
 Artisan::command('user:create', function () {
     $name = $this->ask('Name?');
     $email = $this->ask('Email?');
-    $email = $this->ask('Email?');
-    $pwd = bcrypt($this->secret('Password?'));
+    $pwd = $this->secret('Password?');
     // $pwd = $this->secret('Password?'); // or use secret() to hide the password being inputted
     \DB::table('users')->insert([
             'name' => $name,

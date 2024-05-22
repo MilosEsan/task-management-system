@@ -19,6 +19,33 @@ body {
   font-family: 'Lato', sans-serif;
 }
 
+.badge {
+  display: inline-block;
+  padding: .25em .4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25rem;
+}
+
+.badge-info {
+  color: #fff;
+  background-color: #17a2b8;
+}
+
+.badge-warning {
+  color: #fff;
+  background-color: rgb(251, 134, 0);
+}
+
+.badge-success {
+  color: #fff;
+  background-color: green;
+}
+
 .container {
   margin: 30px auto;
   width: 350px;
@@ -97,7 +124,7 @@ input[type='number'] {
   font-size: 16px;
   margin: 10px 0 30px;
   padding: 10px;
-  width: 100%;
+  width: 25%;
 }
 
 .btn:focus,
@@ -109,18 +136,30 @@ input[type='number'] {
   list-style-type: none;
   padding: 0;
   margin-bottom: 40px;
-  width: 500px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 70px;
 }
 
 .list li {
-  background-color: #fff;
+  background-color: #b07e09;
   box-shadow: var(--box-shadow);
-  color: #333;
+  color: #fff;
+  font-weight: 700;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   position: relative;
   padding: 10px;
   margin: 10px 0;
+  width: fit-content;
+  height: fit-content;
+}
+
+.list li p {
+  margin-bottom: 0;
 }
 
 .list li.plus {
@@ -164,6 +203,7 @@ input[type='number'] {
 
 .list li:hover .delete-btn, .list li:hover .edit-btn{
   opacity: 1;
+  z-index: 999;
 }
 
 @media (max-width: 320px) {
@@ -192,4 +232,10 @@ textarea {
 .container-sm, .container {
   max-width: 1320px;
   height: 100vh;
+}
+
+.app-container {
+  width: 100% !important;
+  color: #2ecc71;
+  margin: 0;
 }

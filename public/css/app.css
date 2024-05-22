@@ -11,3 +11,8 @@ textarea {
 .modal-header {
   display: flex !important;
 }
+
+.container {
+  max-width: 100% !important;
+  background-color: gray;
+}

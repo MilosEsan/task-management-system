@@ -22,7 +22,7 @@
     </head>
     <body class="antialiased">
 
-    <div id="root"></div>
+    <div style="width: 100%;" id="root"></div>
 
 
     <script defer src="/js/manifest.js"></script>
