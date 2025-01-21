@@ -106,12 +106,13 @@ export const ToDos = () => {
           setTodoDetails(res.data.description); 
           setTodoName(res.data.title);
           setCreatedBy(res.data.created_by);
-        } else {
-          // setTodoDetails(null); 
-          // setTodoName(null)
-          console.log(todoName)
-          console.log(todoDetails)
-        }
+        } 
+        // else {
+        //   setTodoDetails(null); 
+        //   setTodoName(null)
+        //   console.log(todoName)
+        //   console.log(todoDetails)
+        // }
       })
     }
 
@@ -147,10 +148,10 @@ export const ToDos = () => {
         <ul className="list mb-1">
           {todos.length ? todos.map((todo, index) => (
             <li key={todo.id}>
-             <div style={todo.progress===1 ? {gap: '50px'} : null} className='d-flex flex-row w-100 justify content-between'>
-                <p>
+             <div style={{gap: '50px'}} className='d-flex flex-row w-100 justify content-between'>
+                <h1 className='todo-title'>
                   {todo.title}
-                </p>
+                </h1>
                 {
                   todo.progress===1 ? <small className='badge badge-info'>IN PROGRESS</small> : 
                   todo.progress===2 ? <small className='badge badge-success'>COMPLETED</small> :
@@ -158,8 +159,11 @@ export const ToDos = () => {
                 }
              </div>
              {todo.created_by && <p>Created by: {todo.created_by}</p>}
-              <button onClick={() => deleteTodo(todo.id)} className="delete-btn">delete</button>
-              <button onClick={() => editTodo(todo.id)} className="edit-btn">edit</button>
+             <p className='text-center mb-3'>{todo.description}</p>
+                <div className='d-flex justify-content-center'>
+                  <button onClick={() => deleteTodo(todo.id)} className="delete-btn">delete</button>
+                  <button onClick={() => editTodo(todo.id)} className="edit-btn">edit</button>
+                </div>
             </li>
             )).reverse(): null}
         </ul>

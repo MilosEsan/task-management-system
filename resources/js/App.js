@@ -77,16 +77,14 @@ function App() {
 
   return (
     <Router>
-        <div className='container w-100' id='app-container' style={{ margin: 0 }}>
+        <div className='container w-100' id='app-container' style={{ margin: 0, maxWidth: '100%', padding: '100px 0px 30px 0px', paddingBottom: '30px' }}>
           {token && <Header onLogout={handleLogout} />}
           <Routes>
-              
                 <Route path="/todos" element={token ?<ToDos /> : <Navigate to='/login'/>} />
                 <Route path="/add-transaction" element={token ? <AddTransaction /> : <Navigate to='/login'/>} />
                 <Route path="/transactions" element={token ? <TransactionList /> : <Navigate to='/login'/>} />
                 <Route path="/users" element={token ? <Users /> : <Navigate to='/login'/>} />
                 <Route path='/login' element={token ? <Navigate to='/todos'/> : <Login onLogin={handleLogin}/>}/>
-
           </Routes>
         </div>
     </Router>

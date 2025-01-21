@@ -26,17 +26,19 @@ export const Header = ({onLogout}) => {
   // console.log('search', location.search);
 
   return (
-    <div className='mb-5 w-100'>
-      <Link to={'/users'}>Users</Link>
-      <Link style={{marginLeft: '30px'}} to={'/todos'}>Todos</Link>
-      <Link style={{marginLeft: '30px'}} to={'/transactions'}>Trasactions</Link>
-      <h2>
-        {pathnameSplitted[1].toUpperCase()}
-      </h2>
+    <header className='mb-5 w-100 d-flex justify-content-around'>
+        <div style={{marginRight: 'auto'}}>
+          <Link to={'/users'}>Users</Link>
+          <Link style={{marginLeft: '30px'}} to={'/todos'}>Todos</Link>
+          <Link style={{marginLeft: '30px'}} to={'/transactions'}>Trasactions</Link>
+        </div>
+        <h2>
+          {pathnameSplitted[1].toUpperCase()}
+        </h2>
 
-      <button onClick={logout}>
+      <button style={{marginLeft: 'auto'}} onClick={logout}>
           logout
       </button>
-    </div>
+    </header>
   )
 }

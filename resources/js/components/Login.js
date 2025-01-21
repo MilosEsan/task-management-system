@@ -102,8 +102,8 @@ function login(e) {
       <h2>Prijavite se</h2>
       <form onSubmit={login}>
         <div>
-          <label htmlFor="username">Korisničko ime:</label>
-          <input type="text" id="username" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <label htmlFor="username">Email:</label>
+          <input className='user-name-field' type="text" id="username" value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
         <div>
           <label htmlFor="password">Lozinka:</label>

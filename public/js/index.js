@@ -6419,7 +6419,10 @@ function App() {
       className: "container w-100",
       id: "app-container",
       style: {
-        margin: 0
+        margin: 0,
+        maxWidth: '100%',
+        padding: '100px 0px 30px 0px',
+        paddingBottom: '30px'
       },
       children: [token && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Header__WEBPACK_IMPORTED_MODULE_1__.Header, {
         onLogout: handleLogout
@@ -6592,26 +6595,34 @@ var Header = function Header(_ref) {
   // console.log('pathname', location.pathname);
   // console.log('search', location.search);
 
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-    className: "mb-5 w-100",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
-      to: '/users',
-      children: "Users"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("header", {
+    className: "mb-5 w-100 d-flex justify-content-around",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       style: {
-        marginLeft: '30px'
+        marginRight: 'auto'
       },
-      to: '/todos',
-      children: "Todos"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
-      style: {
-        marginLeft: '30px'
-      },
-      to: '/transactions',
-      children: "Trasactions"
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
+        to: '/users',
+        children: "Users"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
+        style: {
+          marginLeft: '30px'
+        },
+        to: '/todos',
+        children: "Todos"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
+        style: {
+          marginLeft: '30px'
+        },
+        to: '/transactions',
+        children: "Trasactions"
+      })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
       children: pathnameSplitted[1].toUpperCase()
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+      style: {
+        marginLeft: 'auto'
+      },
       onClick: logout,
       children: "logout"
     })]
@@ -6749,8 +6760,9 @@ var Login = function Login(props) {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
           htmlFor: "username",
-          children: "Korisni\u010Dko ime:"
+          children: "Email:"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+          className: "user-name-field",
           type: "text",
           id: "username",
           value: email,
@@ -6922,14 +6934,16 @@ var ToDos = function ToDos() {
         setTodoDetails(res.data.description);
         setTodoName(res.data.title);
         setCreatedBy(res.data.created_by);
-      } else {
-        // setTodoDetails(null); 
-        // setTodoName(null)
-        console.log(todoName);
-        console.log(todoDetails);
       }
+      // else {
+      //   setTodoDetails(null); 
+      //   setTodoName(null)
+      //   console.log(todoName)
+      //   console.log(todoDetails)
+      // }
     });
   };
+
   function processPostRequest(e) {
     e.preventDefault();
     if (!editId) {
@@ -6960,11 +6974,12 @@ var ToDos = function ToDos() {
       children: todos.length ? todos.map(function (todo, index) {
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("li", {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            style: todo.progress === 1 ? {
+            style: {
               gap: '50px'
-            } : null,
+            },
             className: "d-flex flex-row w-100 justify content-between",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
+              className: "todo-title",
               children: todo.title
             }), todo.progress === 1 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("small", {
               className: "badge badge-info",
@@ -6978,18 +6993,24 @@ var ToDos = function ToDos() {
             })]
           }), todo.created_by && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
             children: ["Created by: ", todo.created_by]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            onClick: function onClick() {
-              return deleteTodo(todo.id);
-            },
-            className: "delete-btn",
-            children: "delete"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            onClick: function onClick() {
-              return editTodo(todo.id);
-            },
-            className: "edit-btn",
-            children: "edit"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+            className: "text-center mb-3",
+            children: todo.description
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            className: "d-flex justify-content-center",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+              onClick: function onClick() {
+                return deleteTodo(todo.id);
+              },
+              className: "delete-btn",
+              children: "delete"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+              onClick: function onClick() {
+                return editTodo(todo.id);
+              },
+              className: "edit-btn",
+              children: "edit"
+            })]
           })]
         }, todo.id);
       }).reverse() : null
@@ -7565,7 +7586,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 ___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Lato&display=swap);"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ":root {\n  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n}\n\n* {\n  box-sizing: border-box;\n}\n\nbody {\n  background-color: #f7f7f7;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  min-height: 100vh;\n  margin: 0;\n  font-family: 'Lato', sans-serif;\n}\n\n.badge {\n  display: inline-block;\n  padding: .25em .4em;\n  font-size: 75%;\n  font-weight: 700;\n  line-height: 1;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: baseline;\n  border-radius: .25rem;\n}\n\n.badge-info {\n  color: #fff;\n  background-color: #17a2b8;\n}\n\n.badge-warning {\n  color: #fff;\n  background-color: rgb(251, 134, 0);\n}\n\n.badge-success {\n  color: #fff;\n  background-color: green;\n}\n\n.container {\n  margin: 30px auto;\n  width: 350px;\n}\n\nh1 {\n  letter-spacing: 1px;\n  margin: 0;\n}\n\nh3 {\n  border-bottom: 1px solid #bbb;\n  padding-bottom: 10px;\n  margin: 40px 0 10px;\n}\n\nh4 {\n  margin: 0;\n  text-transform: uppercase;\n}\n\n.inc-exp-container {\n  background-color: #fff;\n  box-shadow: var(--box-shadow);\n  padding: 20px;\n  display: flex;\n  justify-content: space-between;\n  margin: 20px 0;\n}\n\n.inc-exp-container > div {\n  flex: 1;\n  text-align: center;\n}\n\n.inc-exp-container > div:first-of-type {\n  border-right: 1px solid #dedede;\n}\n\n.money {\n  font-size: 20px;\n  letter-spacing: 1px;\n  margin: 5px 0;\n}\n\n.money.plus {\n  color: #2ecc71;\n}\n\n.money.minus {\n  color: #c0392b;\n}\n\nlabel {\n  display: inline-block;\n  margin: 10px 0;\n}\n\ninput[type='text'],\ninput[type='number'] {\n  border: 1px solid #dedede;\n  border-radius: 2px;\n  display: block;\n  font-size: 16px;\n  padding: 10px;\n  width: 100%;\n}\n\n.btn {\n  cursor: pointer;\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  border: 0;\n  display: block;\n  font-size: 16px;\n  margin: 10px 0 30px;\n  padding: 10px;\n  width: 25%;\n}\n\n.btn:focus,\n.delete-btn:focus {\n  outline: 0;\n}\n\n.list {\n  list-style-type: none;\n  padding: 0;\n  margin-bottom: 40px;\n  width: 100%;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n  gap: 70px;\n}\n\n.list li {\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  font-weight: 700;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  position: relative;\n  padding: 10px;\n  margin: 10px 0;\n  width: -moz-fit-content;\n  width: fit-content;\n  height: -moz-fit-content;\n  height: fit-content;\n}\n\n.list li p {\n  margin-bottom: 0;\n}\n\n.list li.plus {\n  border-right: 5px solid #2ecc71;\n}\n\n.list li.minus {\n  border-right: 5px solid #c0392b;\n}\n\n.delete-btn {\n  cursor: pointer;\n  background-color: #e74c3c;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  position: absolute;\n  top: 50%;\n  left: 0;\n  transform: translate(-100%, -50%);\n  opacity: 0;\n  transition: opacity 0.3s ease;\n}\n.edit-btn {\n  cursor: pointer;\n  background-color: #000000;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  position: absolute;\n  top: 50%;\n  right: -91px;\n  transform: translate(-100%, -50%);\n  opacity: 0;\n  transition: opacity 0.3s ease;\n}\n\n.list li:hover .delete-btn, .list li:hover .edit-btn{\n  opacity: 1;\n  z-index: 999;\n}\n\n@media (max-width: 320px) {\n  .container {\n    width: 300px;\n  }\n}\n\n.fg-fix {\n  display: flex !important;\n  flex-direction: column !important;\n}\n\ntextarea {\n  resize: none !important;\n}\n\n.close-modal-btn {\n  margin-left: auto !important;\n}\n\n.modal-header {\n  display: flex !important;\n}\n\n.container-sm, .container {\n  max-width: 1320px;\n  height: 100vh;\n}\n\n.app-container {\n  width: 100% !important;\n  color: #2ecc71;\n  margin: 0;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ":root {\n  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n}\n\n* {\n  box-sizing: border-box;\n}\n\nbody {\n  background-color: #f7f7f7;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  min-height: 100vh;\n  margin: 0;\n  font-family: 'Lato', sans-serif;\n}\n\n.badge {\n  display: inline-block;\n  padding: .25em .4em;\n  font-size: 75%;\n  font-weight: 700;\n  line-height: 1;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: baseline;\n  border-radius: .25rem;\n}\n\n.badge-info {\n  color: #fff;\n  background-color: #17a2b8;\n}\n\n.badge-warning {\n  color: #fff;\n  background-color: rgb(251, 134, 0);\n}\n\n.badge-success {\n  color: #fff;\n  background-color: green;\n}\n\n.container {\n  margin: 30px auto;\n  width: 350px;\n}\n\nh1 {\n  letter-spacing: 1px;\n  margin: 0;\n}\n\nh3 {\n  border-bottom: 1px solid #bbb;\n  padding-bottom: 10px;\n  margin: 40px 0 10px;\n}\n\nh4 {\n  margin: 0;\n  text-transform: uppercase;\n}\n\n.inc-exp-container {\n  background-color: #fff;\n  box-shadow: var(--box-shadow);\n  padding: 20px;\n  display: flex;\n  justify-content: space-between;\n  margin: 20px 0;\n}\n\n.inc-exp-container > div {\n  flex: 1;\n  text-align: center;\n}\n\n.inc-exp-container > div:first-of-type {\n  border-right: 1px solid #dedede;\n}\n\n.money {\n  font-size: 20px;\n  letter-spacing: 1px;\n  margin: 5px 0;\n}\n\n.money.plus {\n  color: #2ecc71;\n}\n\n.money.minus {\n  color: #c0392b;\n}\n\nlabel {\n  display: inline-block;\n  margin: 10px 0;\n}\n\ninput[type='text'],\ninput[type='number'] {\n  border: 1px solid #dedede;\n  border-radius: 2px;\n  display: block;\n  font-size: 16px;\n  padding: 10px;\n  width: 100%;\n}\n\n.btn {\n  cursor: pointer;\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  border: 0;\n  display: block;\n  font-size: 16px;\n  margin: 10px 0 30px;\n  padding: 10px;\n  width: 25%;\n}\n\n.btn:focus,\n.delete-btn:focus {\n  outline: 0;\n}\n\n.list {\n  list-style-type: none;\n  padding: 0;\n  margin-bottom: 40px;\n  width: 100%;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n  gap: 70px;\n}\n\n.list li {\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  font-weight: 700;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  position: relative;\n  padding: 10px;\n  margin: 10px 0;\n  width: -moz-fit-content;\n  width: fit-content;\n  height: -moz-fit-content;\n  height: fit-content;\n}\n\n.list li p {\n  margin-bottom: 0;\n}\n\n.list li.plus {\n  border-right: 5px solid #2ecc71;\n}\n\n.list li.minus {\n  border-right: 5px solid #c0392b;\n}\n\n.delete-btn {\n  cursor: pointer;\n  background-color: #e74c3c;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  /* transform: translate(-100%, -50%); ----->>> VRLO ZANIMLJIVA STVAR */\n  opacity: 1;\n  transition: opacity 0.3s ease;\n}\n.edit-btn {\n  cursor: pointer;\n  background-color: #000000;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  opacity: 1;\n  transition: opacity 0.3s ease;\n}\n\n.edit-btn, .delete-btn {\n  width: 70px;\n}\n\n.list li:hover .delete-btn, .list li:hover .edit-btn{\n  opacity: 1;\n  z-index: 998;\n}\n\n@media (max-width: 320px) {\n  .container {\n    width: 300px;\n  }\n}\n\n.fg-fix {\n  display: flex !important;\n  flex-direction: column !important;\n}\n\ntextarea {\n  resize: none !important;\n}\n\n.close-modal-btn {\n  margin-left: auto !important;\n}\n\n.modal-header {\n  display: flex !important;\n}\n\n.container-sm, .container {\n  max-width: 100%;\n  height: 100vh;\n}\n\n.app-container {\n  width: 100% !important;\n  margin: 0;\n  padding: 100px 0px 30px 0px !important;\n  max-width: 100% !important;\n}\n\nsmall {\n  height: -moz-fit-content;\n  height: fit-content;\n  margin-left: auto;\n}\n\n.todo-title {\n  color: #000000;\n}\n\nheader {\n  padding: 20px;\n  background-color: #b07e09;\n  position: fixed;\n  top: 0;\n  z-index: 999;\n}\n\nheader > button {\n  height: -moz-fit-content;\n  height: fit-content;\n  padding: 0px, 2.5px;\n}\n\nheader > div > a {\n  text-decoration: none;\n  color: white;\n}\n\n#username {\n  width: 300px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
