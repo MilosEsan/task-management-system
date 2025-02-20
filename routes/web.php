@@ -17,3 +17,5 @@ Route::pattern('path', '[a-zA-Z0-9-/]+');
 Route::any( '{path}', function( $page ) {   
      return view('welcome');
 });
+
+Route::redirect('/', '/todos', 301);
