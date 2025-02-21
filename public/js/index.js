@@ -6620,8 +6620,10 @@ var Header = function Header(_ref) {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
       children: pathnameSplitted[1].toUpperCase()
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+      className: "btn btn-warning",
       style: {
-        marginLeft: 'auto'
+        marginLeft: 'auto',
+        width: '100px'
       },
       onClick: logout,
       children: "logout"
@@ -6653,82 +6655,11 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-// import React, { useContext, useState, useEffect } from 'react';
-// import axios  from 'axios';
-// // import Transaction from './Transaction'
-// import Modal from "react-bootstrap/Modal";
-// import { MainContext } from '../App';
-
-// export const Login = ({logIn}) => {
-
-// const [email, setEmail] = useState('');
-// const [password, setPassword] = useState('');
-
-// const [token, setToken] = useState('');
-
-// function log(data) {
-//   logIn(data)
-// }
-
-// function login(e) {
-//   e.preventDefault();
-//     let params = {
-//       email: email,
-//       password: password
-//     }
-//     axios.post(`/api/login`, params)
-//     .then(response=> {
-//       console.log(response.data.user.name) 
-//       localStorage.setItem('user_name', response.data.user.name)
-//       log(response.data.token)   
-
-//     })
-//     .catch(err=> {
-//       console.log(err)
-//       console.log("ERRORRRR")
-//     })
-//   }
-
-//   const logout = async () => {
-//     try {
-//         await axios.post('/api/logout');
-//         // Ovde možete obaviti dodatne radnje nakon odjavljivanja, npr. ažuriranje stanja komponente ili preusmeravanje korisnika na drugu stranicu
-//         localStorage.removeItem('token')
-//         } catch (error) {
-//             console.error(error);
-//         }
-//     };
-
-// useEffect(() => {
-//   }, []);
-
-//   return (
-//     <div className=''>
-//         <form onSubmit={login}>
-//           <input onInput={e=> setEmail(e.target.value)} placeholder='email' type='email'/>
-//           <input onInput={e=> setPassword(e.target.value)} placeholder='password' type='password'/>
-//           <button type='submit'>
-//             Login
-//           </button>
-//         </form>
-
-//         <button onClick={logout} type='submit'>
-//             Logout
-//           </button>
-//     </div>
-//   )
-// }
 
 
 
 
 var Login = function Login(props) {
-  // const handleSubmit = (e) => {
-  //     e.preventDefault();
-  //     // Pozivamo funkciju za prijavljivanje sa unetim korisničkim imenom i lozinkom
-  //     onLogin(token);
-  // };
-
   function login(e) {
     e.preventDefault();
     var params = {
@@ -6753,16 +6684,18 @@ var Login = function Login(props) {
     password = _useState4[0],
     setPassword = _useState4[1];
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
-      children: "Prijavite se"
+    className: "login-pg",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
+      className: "mb-5",
+      children: "Task Manager"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("form", {
+      className: "d-flex flex-column",
       onSubmit: login,
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
           htmlFor: "username",
           children: "Email:"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
-          className: "user-name-field",
           type: "text",
           id: "username",
           value: email,
@@ -6771,9 +6704,10 @@ var Login = function Login(props) {
           }
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "d-flex flex-column mb-4",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
           htmlFor: "password",
-          children: "Lozinka:"
+          children: "Password:"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
           type: "password",
           id: "password",
@@ -6783,8 +6717,9 @@ var Login = function Login(props) {
           }
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+        className: "btn btn-dark m-auto login-btn",
         type: "submit",
-        children: "Prijavite se"
+        children: "SIGN IN"
       })]
     })]
   });
@@ -7586,7 +7521,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 ___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Lato&display=swap);"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ":root {\n  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n}\n\n* {\n  box-sizing: border-box;\n}\n\nbody {\n  background-color: #f7f7f7;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  min-height: 100vh;\n  margin: 0;\n  font-family: 'Lato', sans-serif;\n}\n\n.badge {\n  display: inline-block;\n  padding: .25em .4em;\n  font-size: 75%;\n  font-weight: 700;\n  line-height: 1;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: baseline;\n  border-radius: .25rem;\n}\n\n.badge-info {\n  color: #fff;\n  background-color: #17a2b8;\n}\n\n.badge-warning {\n  color: #fff;\n  background-color: rgb(251, 134, 0);\n}\n\n.badge-success {\n  color: #fff;\n  background-color: green;\n}\n\n.container {\n  margin: 30px auto;\n  width: 350px;\n}\n\nh1 {\n  letter-spacing: 1px;\n  margin: 0;\n}\n\nh3 {\n  border-bottom: 1px solid #bbb;\n  padding-bottom: 10px;\n  margin: 40px 0 10px;\n}\n\nh4 {\n  margin: 0;\n  text-transform: uppercase;\n}\n\n.inc-exp-container {\n  background-color: #fff;\n  box-shadow: var(--box-shadow);\n  padding: 20px;\n  display: flex;\n  justify-content: space-between;\n  margin: 20px 0;\n}\n\n.inc-exp-container > div {\n  flex: 1;\n  text-align: center;\n}\n\n.inc-exp-container > div:first-of-type {\n  border-right: 1px solid #dedede;\n}\n\n.money {\n  font-size: 20px;\n  letter-spacing: 1px;\n  margin: 5px 0;\n}\n\n.money.plus {\n  color: #2ecc71;\n}\n\n.money.minus {\n  color: #c0392b;\n}\n\nlabel {\n  display: inline-block;\n  margin: 10px 0;\n}\n\ninput[type='text'],\ninput[type='number'] {\n  border: 1px solid #dedede;\n  border-radius: 2px;\n  display: block;\n  font-size: 16px;\n  padding: 10px;\n  width: 100%;\n}\n\n.btn {\n  cursor: pointer;\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  border: 0;\n  display: block;\n  font-size: 16px;\n  margin: 10px 0 30px;\n  padding: 10px;\n  width: 25%;\n}\n\n.btn:focus,\n.delete-btn:focus {\n  outline: 0;\n}\n\n.list {\n  list-style-type: none;\n  padding: 0;\n  margin-bottom: 40px;\n  width: 100%;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n  gap: 70px;\n}\n\n.list li {\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  font-weight: 700;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  position: relative;\n  padding: 10px;\n  margin: 10px 0;\n  width: -moz-fit-content;\n  width: fit-content;\n  height: -moz-fit-content;\n  height: fit-content;\n}\n\n.list li p {\n  margin-bottom: 0;\n}\n\n.list li.plus {\n  border-right: 5px solid #2ecc71;\n}\n\n.list li.minus {\n  border-right: 5px solid #c0392b;\n}\n\n.delete-btn {\n  cursor: pointer;\n  background-color: #e74c3c;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  /* transform: translate(-100%, -50%); ----->>> VRLO ZANIMLJIVA STVAR */\n  opacity: 1;\n  transition: opacity 0.3s ease;\n}\n.edit-btn {\n  cursor: pointer;\n  background-color: #000000;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  opacity: 1;\n  transition: opacity 0.3s ease;\n}\n\n.edit-btn, .delete-btn {\n  width: 70px;\n}\n\n.list li:hover .delete-btn, .list li:hover .edit-btn{\n  opacity: 1;\n  z-index: 998;\n}\n\n@media (max-width: 320px) {\n  .container {\n    width: 300px;\n  }\n}\n\n.fg-fix {\n  display: flex !important;\n  flex-direction: column !important;\n}\n\ntextarea {\n  resize: none !important;\n}\n\n.close-modal-btn {\n  margin-left: auto !important;\n}\n\n.modal-header {\n  display: flex !important;\n}\n\n.container-sm, .container {\n  max-width: 100%;\n  height: 100vh;\n}\n\n.app-container {\n  width: 100% !important;\n  margin: 0;\n  padding: 100px 0px 30px 0px !important;\n  max-width: 100% !important;\n}\n\nsmall {\n  height: -moz-fit-content;\n  height: fit-content;\n  margin-left: auto;\n}\n\n.todo-title {\n  color: #000000;\n}\n\nheader {\n  padding: 20px;\n  background-color: #b07e09;\n  position: fixed;\n  top: 0;\n  z-index: 999;\n}\n\nheader > button {\n  height: -moz-fit-content;\n  height: fit-content;\n  padding: 0px, 2.5px;\n}\n\nheader > div > a {\n  text-decoration: none;\n  color: white;\n}\n\n#username {\n  width: 300px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ":root {\n  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n}\n\n* {\n  box-sizing: border-box;\n}\n\nbody {\n  background-color: #f7f7f7;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  min-height: 100vh;\n  margin: 0;\n  font-family: 'Lato', sans-serif;\n}\n\n.badge {\n  display: inline-block;\n  padding: .25em .4em;\n  font-size: 75%;\n  font-weight: 700;\n  line-height: 1;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: baseline;\n  border-radius: .25rem;\n}\n\n.badge-info {\n  color: #fff;\n  background-color: #17a2b8;\n}\n\n.badge-warning {\n  color: #fff;\n  background-color: rgb(251, 134, 0);\n}\n\n.badge-success {\n  color: #fff;\n  background-color: green;\n}\n\n.container {\n  margin: 30px auto;\n  width: 350px;\n}\n\nh1 {\n  letter-spacing: 1px;\n  margin: 0;\n}\n\nh3 {\n  border-bottom: 1px solid #bbb;\n  padding-bottom: 10px;\n  margin: 40px 0 10px;\n}\n\nh4 {\n  margin: 0;\n  text-transform: uppercase;\n}\n\n.inc-exp-container {\n  background-color: #fff;\n  box-shadow: var(--box-shadow);\n  padding: 20px;\n  display: flex;\n  justify-content: space-between;\n  margin: 20px 0;\n}\n\n.inc-exp-container > div {\n  flex: 1;\n  text-align: center;\n}\n\n.inc-exp-container > div:first-of-type {\n  border-right: 1px solid #dedede;\n}\n\n.money {\n  font-size: 20px;\n  letter-spacing: 1px;\n  margin: 5px 0;\n}\n\n.money.plus {\n  color: #2ecc71;\n}\n\n.money.minus {\n  color: #c0392b;\n}\n\nlabel {\n  display: inline-block;\n  margin: 10px 0;\n}\n\ninput[type='text'],\ninput[type='number'],\ninput[type='password'] {\n  border: 1px solid #dedede;\n  border-radius: 2px;\n  display: block;\n  font-size: 16px;\n  padding: 10px;\n  width: 100%;\n}\n\n.btn {\n  cursor: pointer;\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  border: 0;\n  display: block;\n  font-size: 16px;\n  margin: 10px 0 30px;\n  padding: 10px;\n  width: 25%;\n}\n\n.btn:focus,\n.delete-btn:focus {\n  outline: 0;\n}\n\n.list {\n  list-style-type: none;\n  padding: 0;\n  margin-bottom: 40px;\n  width: 100%;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n  gap: 70px;\n}\n\n.list li {\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  font-weight: 700;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  position: relative;\n  padding: 10px;\n  margin: 10px 0;\n  width: -moz-fit-content;\n  width: fit-content;\n  height: -moz-fit-content;\n  height: fit-content;\n}\n\n.list li p {\n  margin-bottom: 0;\n}\n\n.list li.plus {\n  border-right: 5px solid #2ecc71;\n}\n\n.list li.minus {\n  border-right: 5px solid #c0392b;\n}\n\n.delete-btn {\n  cursor: pointer;\n  background-color: #e74c3c;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  /* transform: translate(-100%, -50%); ----->>> VRLO ZANIMLJIVA STVAR */\n  opacity: 1;\n  transition: opacity 0.3s ease;\n}\n.edit-btn {\n  cursor: pointer;\n  background-color: #000000;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  opacity: 1;\n  transition: opacity 0.3s ease;\n}\n\n.edit-btn, .delete-btn {\n  width: 70px;\n}\n\n.list li:hover .delete-btn, .list li:hover .edit-btn{\n  opacity: 1;\n  z-index: 998;\n}\n\n@media (max-width: 320px) {\n  .container {\n    width: 300px;\n  }\n}\n\n.fg-fix {\n  display: flex !important;\n  flex-direction: column !important;\n}\n\ntextarea {\n  resize: none !important;\n}\n\n.close-modal-btn {\n  margin-left: auto !important;\n}\n\n.modal-header {\n  display: flex !important;\n}\n\n.container-sm, .container {\n  max-width: 100%;\n  height: 100vh;\n}\n\n.app-container {\n  width: 100% !important;\n  margin: 0;\n  padding: 100px 0px 30px 0px !important;\n  max-width: 100% !important;\n}\n\nsmall {\n  height: -moz-fit-content;\n  height: fit-content;\n  margin-left: auto;\n}\n\n.todo-title {\n  color: #000000;\n}\n\nheader {\n  padding: 20px;\n  background-color: #b07e09;\n  position: fixed;\n  top: 0;\n  z-index: 999;\n}\n\nheader > button {\n  height: -moz-fit-content;\n  height: fit-content;\n  padding: 0px, 2.5px;\n}\n\nheader > div > a {\n  text-decoration: none;\n  color: white;\n}\n\n#username, #password {\n  width: 300px;\n}\n\n.login-pg > h1, .login-pg > form {\n  width: -moz-fit-content;\n  width: fit-content;\n  margin: auto;\n}\n\n.login-btn {\n  width: 100px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

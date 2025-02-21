@@ -36,7 +36,7 @@ export const Header = ({onLogout}) => {
           {pathnameSplitted[1].toUpperCase()}
         </h2>
 
-      <button style={{marginLeft: 'auto'}} onClick={logout}>
+      <button className='btn btn-warning' style={{marginLeft: 'auto', width: '100px'}} onClick={logout}>
           logout
       </button>
     </header>

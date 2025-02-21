@@ -105,7 +105,8 @@ label {
 }
 
 input[type='text'],
-input[type='number'] {
+input[type='number'],
+input[type='password'] {
   border: 1px solid #dedede;
   border-radius: 2px;
   display: block;
@@ -265,6 +266,15 @@ header > div > a {
   color: white;
 }
 
-#username {
+#username, #password {
   width: 300px;
+}
+
+.login-pg > h1, .login-pg > form {
+  width: fit-content;
+  margin: auto;
+}
+
+.login-btn {
+  width: 100px;
 }
