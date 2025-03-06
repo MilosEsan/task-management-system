@@ -6670,9 +6670,9 @@ var Login = function Login(props) {
       var token = localStorage.setItem('token', response.data.token);
       props.onLogin(token);
       localStorage.setItem('user_name', response.data.user.name);
+      localStorage.setItem('user_role', response.data.user.role);
     })["catch"](function (err) {
       console.log(err);
-      console.log("ERRORRRR");
     });
   }
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
@@ -6744,6 +6744,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/esm/Modal.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -6781,41 +6784,53 @@ var ToDos = function ToDos() {
     _useState12 = _slicedToArray(_useState11, 2),
     todoDetails = _useState12[0],
     setTodoDetails = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState14 = _slicedToArray(_useState13, 2),
-    error = _useState14[0],
-    setError = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    assignedUser = _useState14[0],
+    setAssignedUser = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState16 = _slicedToArray(_useState15, 2),
-    record_count = _useState16[0],
-    setRecordCount = _useState16[1];
+    error = _useState16[0],
+    setError = _useState16[1];
   var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
     _useState18 = _slicedToArray(_useState17, 2),
-    is_completed = _useState18[0],
-    setIsCompleted = _useState18[1];
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    record_count = _useState18[0],
+    setRecordCount = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({}),
     _useState20 = _slicedToArray(_useState19, 2),
-    created_by = _useState20[0],
-    setCreatedBy = _useState20[1];
+    assignedUsers = _useState20[0],
+    setAssignedUsers = _useState20[1];
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState22 = _slicedToArray(_useState21, 2),
+    userRole = _useState22[0],
+    setUserRole = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState24 = _slicedToArray(_useState23, 2),
+    users = _useState24[0],
+    setUsers = _useState24[1];
   var showModal = function showModal() {
     setIsModalOpen(true);
+    if (!editId) {
+      setTodoName('');
+      setTodoDetails('');
+    }
   };
   var hideModal = function hideModal() {
     setIsModalOpen(false);
-    getTodos(null);
+    if (editId) getTodos(null);
     setIsEditing(false);
     setEditId(null);
     setError('');
   };
   var saveTodo = function saveTodo(e) {
-    e.preventDefault();
+    console.log(e.target[0].value);
     var params = {
       title: todoName,
       description: todoDetails,
-      created_by: localStorage.getItem("user_name")
+      created_by: localStorage.getItem("user_name"),
+      assigned_to: Number(e.target[0].value) !== 0 ? Number(e.target[0].value) : null
     };
     axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/todos/', params).then(function (response) {
-      console.log(response);
       getTodos(null);
       hideModal();
     })["catch"](function (err) {
@@ -6832,16 +6847,24 @@ var ToDos = function ToDos() {
       console.log('test err: ', err);
     });
   };
-  var setProgress = function setProgress(operator) {
-    var newCompleted;
-    if (operator === '+' && is_completed < 2) {
-      newCompleted = is_completed + 1;
-    } else if (operator === '-' && is_completed > 0) {
-      newCompleted = is_completed - 1;
+  var setProgress = function setProgress(operator, id, progress) {
+    var newCompleted = progress;
+    if (operator === '+' && newCompleted < 2) {
+      newCompleted = newCompleted + 1;
+    } else if (operator === '-' && newCompleted > 0) {
+      newCompleted = newCompleted - 1;
     } else {
       return;
     }
-    setIsCompleted(newCompleted);
+    axios__WEBPACK_IMPORTED_MODULE_1___default().put("/api/todos/".concat(id), {
+      progress: newCompleted
+    }).then(function () {
+      setTimeout(function () {
+        getTodos(null);
+      }, 100);
+    })["catch"](function (error) {
+      console.log(error);
+    });
   };
   var deleteTodo = function deleteTodo(id) {
     axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"]('/api/todos/' + id).then(function () {
@@ -6856,29 +6879,34 @@ var ToDos = function ToDos() {
     showModal();
     setEditId(id);
   };
+  function assignUser(id, taskId) {
+    axios__WEBPACK_IMPORTED_MODULE_1___default().put("/api/todos/".concat(taskId), {
+      assigned_to: Number(id)
+    }).then(function () {
+      alert('Task Assigned ');
+      hideModal();
+    })["catch"](function (error) {
+      return console.log(error);
+    });
+  }
   var getTodos = function getTodos(id) {
     axios__WEBPACK_IMPORTED_MODULE_1___default().get(id ? "/api/todos/".concat(id) : '/api/todos').then(function (res) {
       if (!id) {
         setTodos(res.data.todos);
+        markAssignedUsers(res.data.todos);
         setRecordCount(res.data.record_count);
-      } else {
-        setIsCompleted(res.data.progress);
-        console.log(is_completed);
       }
       if (!isEditing) {
         setTodoDetails(res.data.description);
         setTodoName(res.data.title);
-        setCreatedBy(res.data.created_by);
       }
-      // else {
-      //   setTodoDetails(null); 
-      //   setTodoName(null)
-      //   console.log(todoName)
-      //   console.log(todoDetails)
-      // }
+      if (id) {
+        axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/users/' + res.data.assigned_to).then(function (res) {
+          return setAssignedUser(res.data.name);
+        });
+      }
     });
   };
-
   function processPostRequest(e) {
     e.preventDefault();
     if (!editId) {
@@ -6889,16 +6917,28 @@ var ToDos = function ToDos() {
       }, 500);
     }
   }
+  function markAssignedUsers(users) {
+    users.forEach(function (todo) {
+      if (todo.assigned_to && !assignedUsers[todo.assigned_to]) {
+        axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/users/".concat(todo.assigned_to)).then(function (res) {
+          setAssignedUsers(function (prev) {
+            return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, todo.assigned_to, res.data.name));
+          });
+        })["catch"](function (err) {
+          return console.log(err);
+        });
+      }
+    });
+  }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setUserRole(localStorage.getItem('user_role'));
     getTodos(null);
-    if (editId !== null) {
-      axios__WEBPACK_IMPORTED_MODULE_1___default().put("/api/todos/".concat(editId), {
-        progress: is_completed
-      })["catch"](function (error) {
-        console.log(error);
+    if (localStorage.getItem('user_role') === 'super_admin') {
+      axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/users').then(function (res) {
+        setUsers(res.data);
       });
     }
-  }, [editId, is_completed]);
+  }, []);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "container d-flex justify-content-between flex-column",
     style: openModal ? {
@@ -6916,18 +6956,49 @@ var ToDos = function ToDos() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
               className: "todo-title",
               children: todo.title
-            }), todo.progress === 1 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("small", {
-              className: "badge badge-info",
-              children: "IN PROGRESS"
-            }) : todo.progress === 2 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("small", {
-              className: "badge badge-success",
-              children: "COMPLETED"
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("small", {
-              className: "badge badge-warning",
-              children: "Backlog"
+            }), userRole === 'super_admin' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+              className: "mb-2",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
+                className: "mr-1",
+                children: "Set Progress: "
+              }), todo.progress > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                type: "button",
+                onClick: function onClick() {
+                  return setProgress('-', todo.id, todo.progress);
+                },
+                children: '<'
+              }), todo.progress < 2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
+                style: {
+                  marginLeft: '3px'
+                },
+                type: "button",
+                onClick: function onClick() {
+                  return setProgress('+', todo.id, todo.progress);
+                },
+                children: [" ", '>', " "]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), todo.progress === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("small", {
+                className: "badge badge-warning",
+                children: "BACKLOG"
+              }) : todo.progress === 1 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("small", {
+                className: "badge badge-info",
+                children: "IN PROGRESS"
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("small", {
+                className: "badge badge-success",
+                children: "COMPLETED"
+              })]
             })]
-          }), todo.created_by && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
-            children: ["Created by: ", todo.created_by]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            className: "d-flex justify-content-between created-assigned",
+            children: [todo.created_by && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
+                children: "Created By:"
+              }), " ", todo.created_by]
+            }), todo.assigned_to && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
+              className: "assigned_to",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
+                children: "Assigned To:"
+              }), " ", assignedUsers[todo.assigned_to] || 'Loading...']
+            })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
             className: "text-center mb-3",
             children: todo.description
@@ -6962,49 +7033,69 @@ var ToDos = function ToDos() {
       className: "btn btn-dark",
       onClick: function onClick() {
         showModal();
-        setIsEditing(true);
+        setIsEditing(false);
       },
       children: "Add ToDo"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_3__["default"], {
       show: openModal,
       onHide: hideModal,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_3__["default"].Header, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_3__["default"].Header, {
         style: {
           display: 'flex'
         },
-        children: [editId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-          className: "d-flex flex-column",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            className: "d-flex flex-row w-100 align-items-center justify-content-center",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-              type: "button",
-              onClick: function onClick() {
-                return setProgress('-');
-              },
-              children: "-"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-              type: "button",
-              onClick: function onClick() {
-                return setProgress('+');
-              },
-              children: "+"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
-              className: "ml-auto mr-auto",
-              children: is_completed === 0 ? 'to do' : is_completed === 1 ? 'in progress' : is_completed === 2 ? 'completed' : null
-            })]
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
           style: {
             cursor: 'pointer'
           },
           className: "close-modal-btn",
           onClick: hideModal,
           children: "X"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_3__["default"].Body, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("form", {
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap_Modal__WEBPACK_IMPORTED_MODULE_3__["default"].Body, {
+        children: [userRole === 'super_admin' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          children: [editId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
+            onChange: function onChange(e) {
+              assignUser(e.target.value, editId);
+            },
+            className: "form-select",
+            "aria-label": "Default select example",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+              value: "",
+              hidden: true,
+              children: "Assign a team member"
+            }), users.map(function (user) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: user.id,
+                children: user.name
+              }, user.id);
+            })]
+          }), assignedUser && editId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            style: {
+              fontWeight: 'bold',
+              color: 'purple'
+            },
+            className: "text-center",
+            children: ["Assigned to: ", assignedUser]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("form", {
           onSubmit: processPostRequest,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          children: [userRole === 'super_admin' && !editId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "form-group",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
+              className: "form-select",
+              "aria-label": "Default select example",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "",
+                hidden: true,
+                children: "Add a team member"
+              }), users.map(function (user) {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                  value: user.id,
+                  children: user.name
+                }, user.id);
+              })]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
             className: "form-group",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
               htmlFor: "recipient-name",
@@ -7017,7 +7108,7 @@ var ToDos = function ToDos() {
               onChange: function onChange(e) {
                 return setTodoName(e.target.value);
               },
-              value: todoName
+              value: todoName !== null && todoName !== void 0 ? todoName : ''
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
             className: "form-group mb-5 fg-fix",
@@ -7025,23 +7116,14 @@ var ToDos = function ToDos() {
               htmlFor: "message-text",
               className: "col-form-label",
               children: "Description:"
-            }), !isEditing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("textarea", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("textarea", {
               rows: "6",
               className: "form-control",
               id: "message-text",
               onChange: function onChange(e) {
                 return setTodoDetails(e.target.value);
               },
-              value: todoDetails
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("textarea", {
-              rows: "6",
-              className: "form-control",
-              id: "message-text",
-              onChange: function onChange(e) {
-                return setTodoDetails(e.target.value);
-              },
-              value: todoDetails,
-              children: todoDetails
+              value: todoDetails !== null && todoDetails !== void 0 ? todoDetails : ''
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
             className: "w-100 text-center",
@@ -7054,56 +7136,8 @@ var ToDos = function ToDos() {
               children: error
             })]
           })]
-        })
+        })]
       })]
-    })]
-  });
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/Transaction.js":
-/*!************************************************!*\
-  !*** ./resources/js/components/Transaction.js ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Transaction": () => (/* binding */ Transaction)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _context_GlobalState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/GlobalState */ "./resources/js/context/GlobalState.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
-
-
-//Money formatter function
-
-
-function moneyFormatter(num) {
-  var p = num.toFixed(2).split('.');
-  return '$ ' + p[0].split('').reverse().reduce(function (acc, num, i, orig) {
-    return num === '-' ? acc : num + (i && !(i % 3) ? ',' : '') + acc;
-  }, '') + '.' + p[1];
-}
-var Transaction = function Transaction(_ref) {
-  var transaction = _ref.transaction;
-  var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_context_GlobalState__WEBPACK_IMPORTED_MODULE_1__.GlobalContext),
-    deleteTransaction = _useContext.deleteTransaction;
-  var sign = transaction.amount < 0 ? '-' : '+';
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("li", {
-    className: transaction.amount < 0 ? 'minus' : 'plus',
-    children: [transaction.text, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
-      children: [sign, moneyFormatter(transaction.amount)]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-      onClick: function onClick() {
-        return deleteTransaction(transaction.id);
-      },
-      className: "delete-btn",
-      children: "x"
     })]
   });
 };
@@ -7119,16 +7153,14 @@ var Transaction = function Transaction(_ref) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "TransactionList": () => (/* binding */ TransactionList)
+/* harmony export */   "TransactionList": () => (/* binding */ TransactionList),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Transaction__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Transaction */ "./resources/js/components/Transaction.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
-/* harmony import */ var _context_GlobalState__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/GlobalState */ "./resources/js/context/GlobalState.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -7139,42 +7171,26 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
-
-
-
 var TransactionList = function TransactionList() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     transactions = _useState2[0],
     setTransactions = _useState2[1];
-  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_5__.useNavigate)();
   var getTransactions = function getTransactions() {
-    axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/transactions').then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/transactions').then(function (response) {
       setTransactions(response.data);
     });
-  };
-  var addTransaction = function addTransaction() {
-    navigate('/add-transaction');
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     getTransactions();
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("ul", {
-      className: "list",
-      children: transactions.map(function (transaction) {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Transaction__WEBPACK_IMPORTED_MODULE_1__.Transaction, {
-          transaction: transaction
-        }, transaction.id);
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
-      className: "btn btn-dark",
-      onClick: addTransaction,
-      children: "Add Transaction"
-    })]
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
+      children: "Component in progress"
+    })
   });
 };
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TransactionList);
 
 /***/ }),
 
@@ -7521,7 +7537,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 ___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Lato&display=swap);"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ":root {\n  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n}\n\n* {\n  box-sizing: border-box;\n}\n\nbody {\n  background-color: #f7f7f7;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  min-height: 100vh;\n  margin: 0;\n  font-family: 'Lato', sans-serif;\n}\n\n.badge {\n  display: inline-block;\n  padding: .25em .4em;\n  font-size: 75%;\n  font-weight: 700;\n  line-height: 1;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: baseline;\n  border-radius: .25rem;\n}\n\n.badge-info {\n  color: #fff;\n  background-color: #17a2b8;\n}\n\n.badge-warning {\n  color: #fff;\n  background-color: rgb(251, 134, 0);\n}\n\n.badge-success {\n  color: #fff;\n  background-color: green;\n}\n\n.container {\n  margin: 30px auto;\n  width: 350px;\n}\n\nh1 {\n  letter-spacing: 1px;\n  margin: 0;\n}\n\nh3 {\n  border-bottom: 1px solid #bbb;\n  padding-bottom: 10px;\n  margin: 40px 0 10px;\n}\n\nh4 {\n  margin: 0;\n  text-transform: uppercase;\n}\n\n.inc-exp-container {\n  background-color: #fff;\n  box-shadow: var(--box-shadow);\n  padding: 20px;\n  display: flex;\n  justify-content: space-between;\n  margin: 20px 0;\n}\n\n.inc-exp-container > div {\n  flex: 1;\n  text-align: center;\n}\n\n.inc-exp-container > div:first-of-type {\n  border-right: 1px solid #dedede;\n}\n\n.money {\n  font-size: 20px;\n  letter-spacing: 1px;\n  margin: 5px 0;\n}\n\n.money.plus {\n  color: #2ecc71;\n}\n\n.money.minus {\n  color: #c0392b;\n}\n\nlabel {\n  display: inline-block;\n  margin: 10px 0;\n}\n\ninput[type='text'],\ninput[type='number'],\ninput[type='password'] {\n  border: 1px solid #dedede;\n  border-radius: 2px;\n  display: block;\n  font-size: 16px;\n  padding: 10px;\n  width: 100%;\n}\n\n.btn {\n  cursor: pointer;\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  border: 0;\n  display: block;\n  font-size: 16px;\n  margin: 10px 0 30px;\n  padding: 10px;\n  width: 25%;\n}\n\n.btn:focus,\n.delete-btn:focus {\n  outline: 0;\n}\n\n.list {\n  list-style-type: none;\n  padding: 0;\n  margin-bottom: 40px;\n  width: 100%;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n  gap: 70px;\n}\n\n.list li {\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  font-weight: 700;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  position: relative;\n  padding: 10px;\n  margin: 10px 0;\n  width: -moz-fit-content;\n  width: fit-content;\n  height: -moz-fit-content;\n  height: fit-content;\n}\n\n.list li p {\n  margin-bottom: 0;\n}\n\n.list li.plus {\n  border-right: 5px solid #2ecc71;\n}\n\n.list li.minus {\n  border-right: 5px solid #c0392b;\n}\n\n.delete-btn {\n  cursor: pointer;\n  background-color: #e74c3c;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  /* transform: translate(-100%, -50%); ----->>> VRLO ZANIMLJIVA STVAR */\n  opacity: 1;\n  transition: opacity 0.3s ease;\n}\n.edit-btn {\n  cursor: pointer;\n  background-color: #000000;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  opacity: 1;\n  transition: opacity 0.3s ease;\n}\n\n.edit-btn, .delete-btn {\n  width: 70px;\n}\n\n.list li:hover .delete-btn, .list li:hover .edit-btn{\n  opacity: 1;\n  z-index: 998;\n}\n\n@media (max-width: 320px) {\n  .container {\n    width: 300px;\n  }\n}\n\n.fg-fix {\n  display: flex !important;\n  flex-direction: column !important;\n}\n\ntextarea {\n  resize: none !important;\n}\n\n.close-modal-btn {\n  margin-left: auto !important;\n}\n\n.modal-header {\n  display: flex !important;\n}\n\n.container-sm, .container {\n  max-width: 100%;\n  height: 100vh;\n}\n\n.app-container {\n  width: 100% !important;\n  margin: 0;\n  padding: 100px 0px 30px 0px !important;\n  max-width: 100% !important;\n}\n\nsmall {\n  height: -moz-fit-content;\n  height: fit-content;\n  margin-left: auto;\n}\n\n.todo-title {\n  color: #000000;\n}\n\nheader {\n  padding: 20px;\n  background-color: #b07e09;\n  position: fixed;\n  top: 0;\n  z-index: 999;\n}\n\nheader > button {\n  height: -moz-fit-content;\n  height: fit-content;\n  padding: 0px, 2.5px;\n}\n\nheader > div > a {\n  text-decoration: none;\n  color: white;\n}\n\n#username, #password {\n  width: 300px;\n}\n\n.login-pg > h1, .login-pg > form {\n  width: -moz-fit-content;\n  width: fit-content;\n  margin: auto;\n}\n\n.login-btn {\n  width: 100px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ":root {\n  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n}\n\n* {\n  box-sizing: border-box;\n}\n\nbody {\n  background-color: #f7f7f7;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  min-height: 100vh;\n  margin: 0;\n  font-family: 'Lato', sans-serif;\n}\n\n.badge {\n  display: inline-block;\n  padding: .25em .4em;\n  font-size: 75%;\n  font-weight: 700;\n  line-height: 1;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: baseline;\n  border-radius: .25rem;\n}\n\n.badge-info {\n  color: #fff;\n  background-color: #17a2b8;\n}\n\n.badge-warning {\n  color: #fff;\n  background-color: rgb(251, 134, 0);\n}\n\n.badge-success {\n  color: #fff;\n  background-color: green;\n}\n\n.container {\n  margin: 30px auto;\n  width: 350px;\n}\n\nh1 {\n  letter-spacing: 1px;\n  margin: 0;\n}\n\nh3 {\n  border-bottom: 1px solid #bbb;\n  padding-bottom: 10px;\n  margin: 40px 0 10px;\n}\n\nh4 {\n  margin: 0;\n  text-transform: uppercase;\n}\n\n.inc-exp-container {\n  background-color: #fff;\n  box-shadow: var(--box-shadow);\n  padding: 20px;\n  display: flex;\n  justify-content: space-between;\n  margin: 20px 0;\n}\n\n.inc-exp-container > div {\n  flex: 1;\n  text-align: center;\n}\n\n.inc-exp-container > div:first-of-type {\n  border-right: 1px solid #dedede;\n}\n\n.money {\n  font-size: 20px;\n  letter-spacing: 1px;\n  margin: 5px 0;\n}\n\n.money.plus {\n  color: #2ecc71;\n}\n\n.money.minus {\n  color: #c0392b;\n}\n\nlabel {\n  display: inline-block;\n  margin: 10px 0;\n}\n\ninput[type='text'],\ninput[type='number'],\ninput[type='password'] {\n  border: 1px solid #dedede;\n  border-radius: 2px;\n  display: block;\n  font-size: 16px;\n  padding: 10px;\n  width: 100%;\n}\n\n.btn {\n  cursor: pointer;\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  border: 0;\n  display: block;\n  font-size: 16px;\n  margin: 10px 0 30px;\n  padding: 10px;\n  width: 25%;\n}\n\n.btn:focus,\n.delete-btn:focus {\n  outline: 0;\n}\n\n.list {\n  list-style-type: none;\n  padding: 0;\n  margin-bottom: 40px;\n  width: 100%;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n  gap: 70px;\n}\n\n.list li {\n  background-color: #b07e09;\n  box-shadow: var(--box-shadow);\n  color: #fff;\n  font-weight: 700;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  position: relative;\n  padding: 10px;\n  margin: 10px 0;\n  width: -moz-fit-content;\n  width: fit-content;\n  height: -moz-fit-content;\n  height: fit-content;\n}\n\n.list li p {\n  margin-bottom: 0;\n}\n\n.list li.plus {\n  border-right: 5px solid #2ecc71;\n}\n\n.list li.minus {\n  border-right: 5px solid #c0392b;\n}\n\n.delete-btn {\n  cursor: pointer;\n  background-color: #e74c3c;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  /* transform: translate(-100%, -50%); ----->>> VRLO ZANIMLJIVA STVAR */\n  opacity: 1;\n  transition: opacity 0.3s ease;\n}\n.edit-btn {\n  cursor: pointer;\n  background-color: #000000;\n  border: 0;\n  color: #fff;\n  font-size: 20px;\n  line-height: 20px;\n  padding: 2px 5px;\n  opacity: 1;\n  transition: opacity 0.3s ease;\n}\n\n.edit-btn, .delete-btn {\n  width: 70px;\n}\n\n.list li:hover .delete-btn, .list li:hover .edit-btn{\n  opacity: 1;\n  z-index: 998;\n}\n\n@media (max-width: 320px) {\n  .container {\n    width: 300px;\n  }\n}\n\n.fg-fix {\n  display: flex !important;\n  flex-direction: column !important;\n}\n\ntextarea {\n  resize: none !important;\n}\n\n.close-modal-btn {\n  margin-left: auto !important;\n}\n\n.modal-header {\n  display: flex !important;\n}\n\n.container-sm, .container {\n  max-width: 100%;\n  height: 100vh;\n}\n\n.app-container {\n  width: 100% !important;\n  margin: 0;\n  padding: 100px 0px 30px 0px !important;\n  max-width: 100% !important;\n}\n\nsmall {\n  height: -moz-fit-content;\n  height: fit-content;\n  margin-left: auto;\n  width: 100%;\n  letter-spacing: 5px;\n}\n\n.todo-title {\n  color: #000000;\n}\n\nheader {\n  padding: 20px;\n  background-color: #b07e09;\n  position: fixed;\n  top: 0;\n  z-index: 999;\n  height: 86px;\n}\n\nheader > button {\n  height: -moz-fit-content;\n  height: fit-content;\n  padding: 0px, 2.5px;\n}\n\nheader > div > a {\n  text-decoration: none;\n  color: white;\n}\n\n#username, #password {\n  width: 300px;\n}\n\n.login-pg > h1, .login-pg > form {\n  width: -moz-fit-content;\n  width: fit-content;\n  margin: auto;\n}\n\n.login-btn {\n  width: 100px;\n}\n\n.assigned_to {\n  background-color: white;\n  color: #b07e09;\n  padding: 2px;\n  border-radius: 2px;\n  width: -moz-fit-content;\n  width: fit-content;\n}\n\n.created-assigned > p {\n  font-size: 13px;\n}\n\n.created-assigned > p > i {\n  color:rgb(149, 3, 3)\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

@@ -242,6 +242,8 @@ textarea {
 small {
   height: fit-content;
   margin-left: auto;
+  width: 100%;
+  letter-spacing: 5px;
 }
 
 .todo-title {
@@ -254,6 +256,7 @@ header {
   position: fixed;
   top: 0;
   z-index: 999;
+  height: 86px;
 }
 
 header > button {
@@ -277,4 +280,20 @@ header > div > a {
 
 .login-btn {
   width: 100px;
+}
+
+.assigned_to {
+  background-color: white;
+  color: #b07e09;
+  padding: 2px;
+  border-radius: 2px;
+  width: fit-content;
+}
+
+.created-assigned > p {
+  font-size: 13px;
+}
+
+.created-assigned > p > i {
+  color:rgb(149, 3, 3)
 }

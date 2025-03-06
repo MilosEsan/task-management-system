@@ -14,10 +14,10 @@ function login(e) {
       let token = localStorage.setItem('token', response.data.token);
       props.onLogin(token) 
       localStorage.setItem('user_name', response.data.user.name)
+      localStorage.setItem('user_role', response.data.user.role)
     })
     .catch(err=> {
       console.log(err)
-      console.log("ERRORRRR")
     })
   }
 

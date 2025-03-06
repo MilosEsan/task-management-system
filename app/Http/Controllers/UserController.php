@@ -16,4 +16,12 @@ class UserController extends Controller
     {
         return User::find($id);
     }
+
+    public function delete(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return 204;
+    }
 }
