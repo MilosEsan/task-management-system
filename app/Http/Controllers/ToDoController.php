@@ -21,15 +21,33 @@ class ToDoController extends Controller
 
     public function index()
     {
+        // $todos = DB::table('todos')
+        //     ->leftJoin('transactions', 'todos.id', '=', 'transactions.task_id')
+        //     ->leftJoin('users', 'todos.assigned_to', '=', 'users.id')
+        //     ->select(
+        //         'todos.*', 
+        //         'transactions.*',
+        //         'users.name as assigned_user_name',
+        //         'users.email as assigned_user_email'
+        //     )
+        //     ->get();
+        $todos = Todo::with(['user:id,name', 'transactions:task_id,text,amount'])->get();
+
         return [
             'record_count' => $this->recordCount,
-            'todos' => Todo::all()
+            'poruka' => 'dodata relacija sa transakcijama',
+            'todos' => $todos
         ];
+
     }
  
     public function show($id)
     {
-        return Todo::find($id);
+        $todo = Todo::find($id);
+        if ($todo) {
+            $todo->load(['user:id,name', 'transactions:task_id,text,amount']);
+        }
+        return $todo;
     }
 
     public function store(Request $request)
@@ -63,6 +81,8 @@ class ToDoController extends Controller
     {
         $todo = Todo::findOrFail($id);
         $todo->delete();
+
+        // dodati deleted records table
 
         return 204;
     }

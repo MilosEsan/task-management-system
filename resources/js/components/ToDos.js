@@ -10,11 +10,10 @@ export const ToDos = () => {
     const [openModal, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [todoName, setTodoName] = useState('');
-    const [todoDetails, setTodoDetails] = useState('');
     const [assignedUser, setAssignedUser] = useState(null);
+    const [todoDetails, setTodoDetails] = useState('');
     const [error, setError] = useState('');
     const [record_count, setRecordCount] = useState(0);
-    const [assignedUsers, setAssignedUsers] = useState({});
     const [userRole, setUserRole] = useState('')
     const [users, setUsers] = useState([])
 
@@ -23,6 +22,7 @@ export const ToDos = () => {
       if (!editId) {
         setTodoName('')
         setTodoDetails('')
+        setAssignedUser(null)
       }
     };
 
@@ -124,17 +124,13 @@ export const ToDos = () => {
       .then(res=> {
         if (!id) {
           setTodos(res.data.todos)
-          markAssignedUsers(res.data.todos)
           setRecordCount(res.data.record_count)
         } 
         if (!isEditing) {
           setTodoDetails(res.data.description); 
           setTodoName(res.data.title);
+          res.data.user && setAssignedUser(res.data.user.name)
         } 
-        if (id) {
-          axios.get('/api/users/'+res.data.assigned_to)
-          .then((res) => setAssignedUser(res.data.name))
-        }
       })
     }
 
@@ -147,21 +143,6 @@ export const ToDos = () => {
         saveEdit(editId)
       }, 500);
     }
-  }
-
-  function markAssignedUsers(users) {
-    users.forEach(todo => {
-      if (todo.assigned_to && !assignedUsers[todo.assigned_to]) {
-        axios.get(`/api/users/${todo.assigned_to}`)
-          .then(res => {
-            setAssignedUsers(prev => ({
-              ...prev, 
-              [todo.assigned_to]: res.data.name
-            }));
-          })
-          .catch(err => console.log(err)); 
-      }
-    });
   }
 
   useEffect(() => {
@@ -209,8 +190,8 @@ export const ToDos = () => {
              </div>
               <div className="d-flex justify-content-between created-assigned">
                 {todo.created_by && <p><i>Created By:</i> {todo.created_by}</p>}
-                {todo.assigned_to && (
-                    <p className='assigned_to'><i>Assigned To:</i> {assignedUsers[todo.assigned_to] || 'Loading...'}</p>
+                {todo.user && (
+                    <p className='assigned_to'><i>Assigned To:</i> {todo.user.name || 'Loading...'}</p>
                   )}
               </div>
              <p className='text-center mb-3'>{todo.description}</p>

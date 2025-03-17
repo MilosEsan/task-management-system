@@ -5,7 +5,7 @@ import {useState, useEffect} from 'react'
 // import { Balance } from './components/Balance';
 // import { IncomeExpenses } from './components/IncomeExpenses';
 import { TransactionList } from './components/TransactionList';
-import { Login } from './components/Login';
+import { Login } from './components/auth/Login';
 
 import { AddTransaction } from './components/AddTransaction';
 import { ToDos } from './components/ToDos';

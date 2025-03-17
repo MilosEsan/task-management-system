@@ -9,7 +9,7 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        return Transaction::all();
+        return Transaction::with('todo:id,title')->get();
     }
  
     public function show($id)
@@ -24,16 +24,16 @@ class TransactionController extends Controller
 
     public function update(Request $request, $id)
     {
-        $todo = Transaction::findOrFail($id);
-        $todo->update($request->all());
+        $transaction = Transaction::findOrFail($id);
+        $transaction->update($request->all());
 
-        return $todo;
+        return $transaction;
     }
 
     public function delete(Request $request, $id)
     {
-        $todo = Transaction::findOrFail($id);
-        $todo->delete();
+        $transaction = Transaction::findOrFail($id);
+        $transaction->delete();
 
         return 204;
     }

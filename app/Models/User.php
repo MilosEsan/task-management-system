@@ -24,6 +24,11 @@ class User extends Authenticatable
         'role'
     ];
 
+    public function todos()
+    {
+        return $this->hasMany(Todo::class, 'assigned_to');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

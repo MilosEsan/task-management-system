@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRoleToUsersTable extends Migration
+class AddTaskIdToTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddRoleToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->nullable()->default('team_member');
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->foreignId('task_id')->nullable()->constrained('todos');
         });
     }
 
@@ -25,8 +25,8 @@ class AddRoleToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->dropColumn('task_id');
         });
     }
 }

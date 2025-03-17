@@ -30,6 +30,7 @@ Route::delete('transactions/{id}', 'TransactionController@delete');
 
 // Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('users', 'UserController@index');
+    Route::post('user/create', 'UserController@create');
     Route::get('users/{id}', 'UserController@show');
     Route::delete('users/{id}', 'UserController@delete');
 // });
