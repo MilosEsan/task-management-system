@@ -16,24 +16,26 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('todos', 'ToDoController@index');
-Route::get('todos/{id}', 'ToDoController@show');
-Route::post('todos', 'ToDoController@store');
-Route::put('todos/{id}', 'ToDoController@update');
-Route::delete('todos/{id}', 'ToDoController@delete');
+Route::post('user/create', 'UserController@create');
 
-Route::get('transactions', 'TransactionController@index');
-Route::get('transactions/{id}', 'TransactionController@show');
-Route::post('transactions', 'TransactionController@store');
-Route::put('transactions/{id}', 'TransactionController@update');
-Route::delete('transactions/{id}', 'TransactionController@delete');
-
-// Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
+    // todos
+    Route::get('todos', 'ToDoController@index');
+    Route::get('todos/{id}', 'ToDoController@show');
+    Route::post('todos', 'ToDoController@store');
+    Route::put('todos/{id}', 'ToDoController@update');
+    Route::delete('todos/{id}', 'ToDoController@delete');
+    // transactions
+    Route::get('transactions', 'TransactionController@index');
+    Route::get('transactions/{id}', 'TransactionController@show');
+    Route::post('transactions', 'TransactionController@store');
+    Route::put('transactions/{id}', 'TransactionController@update');
+    Route::delete('transactions/{id}', 'TransactionController@delete');
+    // users
     Route::get('users', 'UserController@index');
-    Route::post('user/create', 'UserController@create');
     Route::get('users/{id}', 'UserController@show');
     Route::delete('users/{id}', 'UserController@delete');
-// });
+});
 
 Route::post('login', 'AuthController@login');
 Route::post('logout', 'AuthController@logout');

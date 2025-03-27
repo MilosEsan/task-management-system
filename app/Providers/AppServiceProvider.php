@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\Contracts\ToDoInterface;
+use App\Repositories\ToDoRepository;
+use App\Repositories\Contracts\UserInterface;
+use App\Repositories\UserRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +17,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(ToDoInterface::class, ToDoRepository::class);
+        $this->app->bind(UserInterface::class, UserRepository::class);
     }
 
     /**

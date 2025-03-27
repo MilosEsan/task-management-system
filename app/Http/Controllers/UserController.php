@@ -1,44 +1,40 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
 
+use App\Http\Requests\UserRequest;
+use App\Services\UserService;
+
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     public function index()
     {
-        return User::all();
+        return $this->userService->getAllUsers();
     }
  
     public function show($id)
     {
-        return User::find($id);
+        return $this->userService->getTodoById($id);
     }
 
-    public function create(Request $request)
+    public function create(UserRequest $request)
     {
-        $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-        ]);
-
-        User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password), // Hashiranje lozinke
-        ]);
-
-        return response()->json(['msg'=> 'task uspjesno kreiran']);
+        return $this->userService->createUser($request->validated());
     }
 
-    public function delete(Request $request, $id)
+    public function delete($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-
-        return 204;
+        return response()->json(
+            ['message' => 'User Deleted Successfully'], 
+            $this->userService->deleteUser($id) ? 200 : 400
+        );
     }
 }

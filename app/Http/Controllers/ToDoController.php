@@ -2,88 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Todo;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\ToDoRequest;
+use App\Services\ToDoService;
 
 class ToDoController extends Controller
 {
+    protected $toDoService;
 
-    private $recordCount; 
-
-    public function __construct()
+    public function __construct(ToDoService $toDoService)
     {
-        $this->recordCount = DB::table('todos')
-            ->where('created_at', '>=', now()->startOfDay())
-            ->where('created_at', '<=', now()->endOfDay())
-            ->count();
+        $this->toDoService = $toDoService;
     }
 
     public function index()
     {
-        // $todos = DB::table('todos')
-        //     ->leftJoin('transactions', 'todos.id', '=', 'transactions.task_id')
-        //     ->leftJoin('users', 'todos.assigned_to', '=', 'users.id')
-        //     ->select(
-        //         'todos.*', 
-        //         'transactions.*',
-        //         'users.name as assigned_user_name',
-        //         'users.email as assigned_user_email'
-        //     )
-        //     ->get();
-        $todos = Todo::with(['user:id,name', 'transactions:task_id,text,amount'])->get();
-
-        return [
-            'record_count' => $this->recordCount,
-            'poruka' => 'dodata relacija sa transakcijama',
-            'todos' => $todos
-        ];
-
+        return $this->toDoService->getAllTodos();
     }
- 
+
     public function show($id)
     {
-        $todo = Todo::find($id);
-        if ($todo) {
-            $todo->load(['user:id,name', 'transactions:task_id,text,amount']);
-        }
-        return $todo;
+        return $this->toDoService->getTodoById($id);
     }
 
-    public function store(Request $request)
+    public function store(ToDoRequest $request)
     {
-        if ($this->recordCount <= 20) {
-            try{
-                Todo::create($request->all());
-                return response()->json([
-                    'message'=>'ToDoo Created Successfully!!',
-                ]);
-            }catch(\Exception $e){
-                \Log::error($e->getMessage());
-                return response()->json([
-                    'message'=>'Something goes wrong while creating a todo!!'
-                ],500);
-            }
-        } else {
-            return response()->json(['message' => 'Previše zapisa dodano danas (There\'s no more place for any record) '.'('.$recordCount.')'], 422);
-        }
+        return $this->toDoService->createTodo($request->validated());
     }
 
-    public function update(Request $request, $id)
+    public function update(ToDoRequest $request, $id)
     {
-        $todo = Todo::findOrFail($id);
-        $todo->update($request->all());
-
-        return $todo;
+        return $this->toDoService->updateTodo($id, $request->validated());
     }
 
-    public function delete(Request $request, $id)
+    public function delete($id)
     {
-        $todo = Todo::findOrFail($id);
-        $todo->delete();
-
-        // dodati deleted records table
-
-        return 204;
+        return response()->json(
+            ['message' => 'Deleted Successfully'], 
+            $this->toDoService->deleteTodo($id) ? 200 : 400
+        );
     }
 }

@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>Laravel</title>
 
@@ -29,46 +30,4 @@
     <script defer src="/js/vendor.js"></script>
     <script defer src="/js/index.js"></script>
     </body>
-    <!-- <script>
-        function createTodo() {
-
-                fetch('/api/todos', {
-
-                    method: "POST",
-                    
-                    body: JSON.stringify({
-                        "title": 'treci TODO',
-                        "description": 'TEST DESCRIPTION SHOMMY EM 3'
-                    }),
-                    
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8"
-                    }
-                })
-
-                .then((response) => {
-
-                    if (!response.ok) {
-                        console.log(response.statusText)
-                    } else {
-                        alert('Todo created successfully!')
-                    }
-
-                    response.json()
-                })
-
-                .then(json => console.log(json))
-                }
-
-
-        function getTodos() {
-            fetch('/api/todos',{
-                method: "GET"
-            })
-            .then((response)=> {
-                response.json()
-            })
-            .then(json=> console.log(json))
-        }
-    </script> -->
 </html>

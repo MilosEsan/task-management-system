@@ -62,7 +62,6 @@ function App() {
 
   useEffect(()=> {
     setToken(localStorage.getItem('token'))
-    console.log('from state:', token)
   }, [token])
 
   // function logIn(data) {

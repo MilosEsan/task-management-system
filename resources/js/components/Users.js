@@ -8,7 +8,13 @@ export const Users = () => {
 const [users, setUsers] = useState([]);
 
 const getUsers = () => {
-    axios.get('/api/users')
+    axios.get('/api/users', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+
+        }
+    })
     .then(res=> {
         setUsers(res.data)
     })

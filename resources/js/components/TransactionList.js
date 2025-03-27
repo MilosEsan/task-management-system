@@ -6,7 +6,13 @@ export const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
 
 const getTransactions = () => {
-  axios.get('/api/transactions') 
+  axios.get('/api/transactions',
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }
+  ) 
   .then(response=> {
     setTransactions(response.data)
   })

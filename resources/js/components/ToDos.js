@@ -42,8 +42,14 @@ export const ToDos = () => {
         created_by: localStorage.getItem("user_name"),
         assigned_to: Number(e.target[0].value) !== 0 ? Number(e.target[0].value) : null
       }
-      axios.post('/api/todos/', 
-        params
+      axios.post('/api/todos/',
+        params,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          }
+        }
       )
       .then((response)=> {
         getTodos(null)
@@ -55,10 +61,18 @@ export const ToDos = () => {
     };
 
     const saveEdit = (e) => {
-      axios.put('/api/todos/'+editId, {
+      axios.put('/api/todos/'+editId, 
+        {
         "title": todoName,
         "description": todoDetails
-      })
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          },
+        }
+      )
         .then(res=> {
           hideModal()
         })
@@ -78,9 +92,17 @@ export const ToDos = () => {
         return;
       }
 
-      axios.put(`/api/todos/${id}`, {
-        progress: newCompleted,
-      })
+      axios.put(`/api/todos/${id}`,         
+        {
+          progress: newCompleted,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          }
+        }
+      )
       .then(()=> {
         setTimeout(() => {
           getTodos(null)
@@ -92,7 +114,14 @@ export const ToDos = () => {
     }
 
     const deleteTodo = (id) => {
-      axios.delete('/api/todos/'+id)
+      axios.delete('/api/todos/'+id,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          }
+        }
+      )
       .then(()=> {
         getTodos(null)
       })
@@ -111,7 +140,14 @@ export const ToDos = () => {
     function assignUser(id, taskId) {
       axios.put(`/api/todos/${taskId}`, {
         assigned_to: Number(id)
-      })
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+      }
+    )
       .then(()=> {
         alert('Task Assigned ')
         hideModal()
@@ -120,7 +156,14 @@ export const ToDos = () => {
     }
     
     const getTodos = (id) => {
-      axios.get(id ? `/api/todos/${id}` : '/api/todos')
+      axios.get(id ? `/api/todos/${id}` : '/api/todos',
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          }
+        }
+      )
       .then(res=> {
         if (!id) {
           setTodos(res.data.todos)
@@ -151,7 +194,12 @@ export const ToDos = () => {
     getTodos(null);
     
     if (localStorage.getItem('user_role')==='super_admin') {
-      axios.get('/api/users')
+      axios.get('/api/users', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
       .then((res)=> {
         setUsers(res.data)
       })

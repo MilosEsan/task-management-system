@@ -6402,7 +6402,6 @@ function App() {
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     setToken(localStorage.getItem('token'));
-    console.log('from state:', token);
   }, [token]);
 
   // function logIn(data) {
@@ -6730,7 +6729,12 @@ var ToDos = function ToDos() {
       created_by: localStorage.getItem("user_name"),
       assigned_to: Number(e.target[0].value) !== 0 ? Number(e.target[0].value) : null
     };
-    axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/todos/', params).then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/todos/', params, {
+      headers: {
+        Authorization: "Bearer ".concat(localStorage.getItem('token')),
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      }
+    }).then(function (response) {
       getTodos(null);
       hideModal();
     })["catch"](function (err) {
@@ -6741,6 +6745,11 @@ var ToDos = function ToDos() {
     axios__WEBPACK_IMPORTED_MODULE_1___default().put('/api/todos/' + editId, {
       "title": todoName,
       "description": todoDetails
+    }, {
+      headers: {
+        Authorization: "Bearer ".concat(localStorage.getItem('token')),
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      }
     }).then(function (res) {
       hideModal();
     })["catch"](function (err) {
@@ -6758,6 +6767,11 @@ var ToDos = function ToDos() {
     }
     axios__WEBPACK_IMPORTED_MODULE_1___default().put("/api/todos/".concat(id), {
       progress: newCompleted
+    }, {
+      headers: {
+        Authorization: "Bearer ".concat(localStorage.getItem('token')),
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      }
     }).then(function () {
       setTimeout(function () {
         getTodos(null);
@@ -6767,7 +6781,12 @@ var ToDos = function ToDos() {
     });
   };
   var deleteTodo = function deleteTodo(id) {
-    axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"]('/api/todos/' + id).then(function () {
+    axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"]('/api/todos/' + id, {
+      headers: {
+        Authorization: "Bearer ".concat(localStorage.getItem('token')),
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      }
+    }).then(function () {
       getTodos(null);
     })["catch"](function (err) {
       console.log(err);
@@ -6782,6 +6801,11 @@ var ToDos = function ToDos() {
   function assignUser(id, taskId) {
     axios__WEBPACK_IMPORTED_MODULE_1___default().put("/api/todos/".concat(taskId), {
       assigned_to: Number(id)
+    }, {
+      headers: {
+        Authorization: "Bearer ".concat(localStorage.getItem('token')),
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      }
     }).then(function () {
       alert('Task Assigned ');
       hideModal();
@@ -6790,7 +6814,12 @@ var ToDos = function ToDos() {
     });
   }
   var getTodos = function getTodos(id) {
-    axios__WEBPACK_IMPORTED_MODULE_1___default().get(id ? "/api/todos/".concat(id) : '/api/todos').then(function (res) {
+    axios__WEBPACK_IMPORTED_MODULE_1___default().get(id ? "/api/todos/".concat(id) : '/api/todos', {
+      headers: {
+        Authorization: "Bearer ".concat(localStorage.getItem('token')),
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      }
+    }).then(function (res) {
       if (!id) {
         setTodos(res.data.todos);
         setRecordCount(res.data.record_count);
@@ -6816,7 +6845,12 @@ var ToDos = function ToDos() {
     setUserRole(localStorage.getItem('user_role'));
     getTodos(null);
     if (localStorage.getItem('user_role') === 'super_admin') {
-      axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/users').then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/users', {
+        headers: {
+          Authorization: "Bearer ".concat(localStorage.getItem('token')),
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+      }).then(function (res) {
         setUsers(res.data);
       });
     }
@@ -7059,7 +7093,11 @@ var TransactionList = function TransactionList() {
     transactions = _useState2[0],
     setTransactions = _useState2[1];
   var getTransactions = function getTransactions() {
-    axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/transactions').then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/transactions', {
+      headers: {
+        Authorization: "Bearer ".concat(localStorage.getItem('token'))
+      }
+    }).then(function (response) {
       setTransactions(response.data);
     });
   };
@@ -7110,7 +7148,12 @@ var Users = function Users() {
     users = _useState2[0],
     setUsers = _useState2[1];
   var getUsers = function getUsers() {
-    axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/users').then(function (res) {
+    axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/users', {
+      headers: {
+        Authorization: "Bearer ".concat(localStorage.getItem('token')),
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      }
+    }).then(function (res) {
       setUsers(res.data);
     });
   };
