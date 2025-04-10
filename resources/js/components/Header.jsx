@@ -1,11 +1,17 @@
 import React from 'react'
 import { Link, Navigate, useLocation } from "react-router-dom"
 import axios  from 'axios';
+import { useEffect } from 'react';
 
 export const Header = ({onLogout}) => {
 
   // LINK IMPORT AND check
-
+  useEffect(() => {
+    console.log('Header component mounted');
+    return () => {
+      console.log('Header component unmounted');
+    };
+  })
   const logout = () => {
          axios.post('/api/logout')
          .then(()=> {

@@ -6,7 +6,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>Laravel</title>
-
+        @viteReactRefresh 
+        @vite(['resources/js/index.jsx'])
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -20,14 +21,11 @@
                 font-family: 'Nunito', sans-serif;
             }
         </style>
+
     </head>
     <body class="antialiased">
 
     <div style="width: 100%;" id="root"></div>
 
-
-    <script defer src="/js/manifest.js"></script>
-    <script defer src="/js/vendor.js"></script>
-    <script defer src="/js/index.js"></script>
     </body>
 </html>
