@@ -8,6 +8,7 @@ use App\Notifications\PersonalizedNotification;
 use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 use App\Models\Todo;
+use App\Models\User;
 
 class ToDoService
 {
@@ -68,13 +69,15 @@ class ToDoService
         return $this->toDoRepository->delete($id);
     }
 
-    public function completeTask($taskId, string $taskName)
+    private function completeTask($taskId, string $taskName)
     {
         $message = $this->notificationService->generateNotificationContent(auth()->user(), $taskName);
 
-        // Send notification
-        auth()->user()->notify(new PersonalizedNotification($message));
+        $managers = User::where('role', 'super_admin')->get();
 
+        foreach ($managers as $manager) {
+            $manager->notify(new PersonalizedNotification($message));
+        }
         return response()->json(['message' => 'Task completed and notification sent!']);
     }
 }
