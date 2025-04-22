@@ -22,7 +22,7 @@ class UserController extends Controller
  
     public function show($id)
     {
-        return $this->userService->getTodoById($id);
+        return $this->userService->getUserById($id);
     }
 
     public function create(UserRequest $request)

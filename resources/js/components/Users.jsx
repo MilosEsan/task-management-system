@@ -1,58 +1,63 @@
-import React, {useState, useEffect } from 'react';
-import axios  from 'axios';
-// import Transaction from './Transaction'
-// import Modal from "react-bootstrap/Modal";
 
-export const Users = () => {
+import React, { Component } from 'react';
+import axios from 'axios';
 
-const [users, setUsers] = useState([]);
+export class Users extends Component {
+  constructor(props) {
+    super(props);
+    this.getUsers = this.getUsers.bind(this);
+    this.state = {
+      users: [],
+    };
+  }
 
-const getUsers = () => {
-    axios.get('/api/users', {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+  componentDidMount() {
+    this.getUsers();
+  }
 
-        }
-    })
-    .then(res=> {
-        setUsers(res.data)
-    })
-}
+  getUsers = () => {
+        axios.get('/api/users', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    
+            }
+        })
+        .then(res=> {
+            this.setState({
+                users: res.data
+            })
+        })
+    }
 
-useEffect(() => {
-    console.log('::')
-    console.log(localStorage.getItem("user_name"))
-    getUsers();
+    render(){
+        return (
+            <div className='container'>
+                {/* <button onClick={login} className='btn btn-light'>Login</button> */}
+                <table className="table">
+                    <thead className="thead-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Date Added</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.users.map((user)=>
+                                (
+                                    <tr key={user.id}>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.created_at}</td>
+                                    </tr>
+                                )
+                            )
+                        }
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
 
-  }, []);
-
-
-  return (
-    <div className='container'>
-        {/* <button onClick={login} className='btn btn-light'>Login</button> */}
-        <table className="table">
-            <thead className="thead-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Date Added</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    users.map((user)=>
-                        (
-                            <tr key={user.id}>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>{user.created_at}</td>
-                            </tr>
-                        )
-                    )
-                }
-            </tbody>
-        </table>
-    </div>
-  )
 }

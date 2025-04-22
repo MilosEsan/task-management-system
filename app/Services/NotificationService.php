@@ -15,7 +15,7 @@ class NotificationService
             
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . env('HUGGINGFACE_API_KEY')
-            ])->post('https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1', [
+            ])->post('https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct', [
                 'inputs' => $prompt,
             ]);
             

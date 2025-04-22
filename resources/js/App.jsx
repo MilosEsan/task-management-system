@@ -1,14 +1,10 @@
 import React from 'react';
-import { Header } from './components/Header';
-import axios from 'axios';
+import Header from './components/Header';
 import {useState, useEffect} from 'react'
-// import { Balance } from './components/Balance';
-// import { IncomeExpenses } from './components/IncomeExpenses';
 import { TransactionList } from './components/TransactionList';
 import { Login } from './components/auth/Login';
-
 import { AddTransaction } from './components/AddTransaction';
-import { ToDos } from './components/ToDos';
+import  ToDos  from './components/ToDos';
 import { Users } from './components/Users';
 
 
@@ -63,16 +59,6 @@ function App() {
   useEffect(()=> {
     setToken(localStorage.getItem('token'))
   }, [token])
-
-  // function logIn(data) {
-  //   localStorage.setItem("token", data)
-  // }
-
-  // useEffect(()=> {
-  //   setToken(localStorage.getItem("token"))
-  //   console.log(token);
-  // }, [token])
-
 
   return (
     <Router>
