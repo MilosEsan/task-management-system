@@ -8,29 +8,7 @@ import  ToDos  from './components/ToDos';
 import { Users } from './components/Users';
 
 
-
-// The source database is the database from which the new changes are coming. 
-// The target database is the database to which you are moving the new changes.
-// Migration is the process of transfering data from first to another database type.
-
-
-// Microservices are an architectural and 
-// organizational approach to software development where software 
-// is composed of small independent services 
-// that communicate over well-defined APIs. 
-// These services are owned by small, self-contained teams.
-
-// Services in a microservice architecture are often processes that communicate over 
-// a network to fulfill a goal using technology-agnostic 
-// protocols such as HTTP. Services are organized around business capabilities.
-
-
-
-// import { GlobalProvider } from './context/GlobalState';
-
 import {
-  // createBrowserRouter,
-  // RouterProvider,
   BrowserRouter as Router,
   Routes,
   Navigate,

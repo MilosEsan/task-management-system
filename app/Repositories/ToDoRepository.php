@@ -10,9 +10,23 @@ class ToDoRepository implements ToDoInterface
 {
     public function getAll()
     {
-        return Todo::with(['user:id,name', 'transactions:task_id,text,amount'])
-        ->orderBy('progress', 'asc')
+        $backlog = Todo::with(['user:id,name', 'transactions:task_id,text,amount'])
+        ->where('progress', 0)
         ->get();
+
+        $in_progress = Todo::with(['user:id,name', 'transactions:task_id,text,amount'])
+        ->where('progress', 1)
+        ->get();
+
+        $completed = Todo::with(['user:id,name', 'transactions:task_id,text,amount'])
+        ->where('progress', 2)
+        ->get();
+
+        return [
+            'backlog' => $backlog,
+            'in_progress' => $in_progress,
+            'completed' => $completed
+        ];
     }
 
     public function findById($id)

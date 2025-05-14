@@ -22,11 +22,14 @@ class ToDoService
 
     public function getAllTodos()
     {
-        return [
+        return response()->json([
             'record_count' => $this->toDoRepository->countTodayRecords(),
-            'poruka'       => 'dodata relacija sa transakcijama',
-            'todos'        => $this->toDoRepository->getAll()
-        ];
+            'user'         => auth()->user()->id,
+            'backlog'      => $this->toDoRepository->getAll()['backlog'],
+            'in_progress'  => $this->toDoRepository->getAll()['in_progress'],
+            'completed'    => $this->toDoRepository->getAll()['completed'],
+            'date'         => now()->format('Y-m-d H:i:s'),
+        ]);
     }
 
     public function getTodoById($id)

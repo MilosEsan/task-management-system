@@ -7,7 +7,9 @@ class Todos extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      todos: [],
+      backlog: [],
+      in_progress: [],
+      completed: [],
       editId: null,
       openModal: false,
       isEditing: false,
@@ -229,8 +231,9 @@ class Todos extends React.Component {
       }
     )
     .then(res=> {
+      console.log('res: ', res);
       if (id) {
-        // edit case: popuni polja
+        // edit case: popuni polja (samo za in_progress)
         this.setState({
           todoName: res.data.title,
           todoDetails: res.data.description,
@@ -239,7 +242,9 @@ class Todos extends React.Component {
       } else {
         // list case
         this.setState({
-          todos: res.data.todos,
+          backlog: res.data.backlog,
+          in_progress: res.data.in_progress,
+          completed: res.data.completed,
           record_count: res.data.record_count
         });
       }
@@ -289,55 +294,152 @@ class Todos extends React.Component {
 
   render() {
     return (
-      <div className='container d-flex justify-content-between flex-column' style={this.state.openModal ? {display: 'none'} : null}>
-          <ul className="list mb-1">
-            {this.state.todos.length ? this.state.todos.map((todo, index) => (
-              <li key={todo.id}>
-               <div style={{gap: '50px'}} className='d-flex flex-row w-100 justify content-between'>
-                  <h1 className='todo-title'>
-                    {todo.title}
-                  </h1>
-                  {this.state.userRole==='super_admin' && 
-                  <div className='mb-2'>
-                    <i className='mr-1'>Set Progress: </i>
-                    {todo.progress > 0 &&                  
-                      <button type="button" onClick={() => this.setProgress('-', todo.id, todo.progress)}>{'<'}</button>
-                    }
-                    {todo.progress < 2 &&
-                      <button style={{marginLeft: '3px'}} type="button" onClick={() => this.setProgress('+', todo.id, todo.progress)}> {'>'} </button> 
-                    }
-                    <br></br>
-                    {
-                      todo.progress === 0 ? (
-                        <small className="badge badge-warning">BACKLOG</small>
-                      ) : todo.progress === 1 ? (
-                        <small className="badge badge-info">IN PROGRESS</small>
-                      ) : (
-                        <small className="badge badge-success">COMPLETED</small>
-                      )
-                    }
-                  </div>}
-               </div>
-                <div className="d-flex justify-content-between created-assigned">
-                  {todo.created_by && <p><i>Created By:</i> {todo.created_by}</p>}
-                  {todo.user && (
-                      <p className='assigned_to'><i>Assigned To:</i> {todo.user.name || 'Loading...'}</p>
-                    )}
-                </div>
-               <p className='text-center mb-3'>{todo.description}</p>
-                  <div className='d-flex justify-content-center'>
-                    <button onClick={() => this.deleteTodo(todo.id, todo.title)} className="delete-btn">delete</button>
-                    <button onClick={() => this.editTodo(todo.id)} className="edit-btn">edit</button>
+      <div className='d-flex p-3 justify-content-between flex-column' style={this.state.openModal ? {display: 'none'} : null}>
+          <div className="d-flex mb-5 justify-content-between w-100 align-items-center">
+            <p className={this.state.record_count > 15 ? 'text-danger' : 'text-warning'}>
+              The number of records for today: {this.state.record_count} ({20 - this.state.record_count} places left)
+            </p>
+            <button style={{width: '250px', height: '40px'}} type="button w-25" className="btn btn-dark" onClick={() => { this.showModal(); this.setState({ isEditing: false });}}>
+              Add Task
+            </button>
+          </div>
+          <div className='task_grid'>
+            <div>
+              <h2>BACKLOG</h2>
+              <ul className="list mb-1">
+                {this.state.backlog.length ? this.state.backlog.map((todo, index) => (
+                  <li key={todo.id}>
+                  <div style={{gap: '50px'}} className='d-flex flex-row w-100 justify content-between'>
+                      <h1 className='todo-title'>
+                        {todo.title}
+                      </h1>
+                      {this.state.userRole==='super_admin' && 
+                      <div className='mb-2'>
+                        <i className='mr-1'>Set Progress: </i>
+                        {todo.progress > 0 &&                  
+                          <button type="button" onClick={() => this.setProgress('-', todo.id, todo.progress)}>{'<'}</button>
+                        }
+                        {todo.progress < 2 &&
+                          <button style={{marginLeft: '3px'}} type="button" onClick={() => this.setProgress('+', todo.id, todo.progress)}> {'>'} </button> 
+                        }
+                        <br></br>
+                        {
+                          todo.progress === 0 ? (
+                            <small className="badge badge-warning">BACKLOG</small>
+                          ) : todo.progress === 1 ? (
+                            <small className="badge badge-info">IN PROGRESS</small>
+                          ) : (
+                            <small className="badge badge-success">COMPLETED</small>
+                          )
+                        }
+                      </div>}
                   </div>
-              </li>
-              )).reverse(): null}
-          </ul>
-          <p className={this.state.record_count > 15 ? 'text-danger' : 'text-warning'}>
-            The number of records for today: {this.state.record_count} ({20 - this.state.record_count} places left)
-          </p>
-          <button style={{width: '250px', marginLeft: 'auto', height: '40px'}} type="button w-25" className="btn btn-dark" onClick={() => { this.showModal(); this.setState({ isEditing: false });}}>
-            Add ToDo
-          </button>
+                    <div className="d-flex justify-content-between created-assigned">
+                      {todo.created_by && <p><i>Created By:</i> {todo.created_by}</p>}
+                      {todo.user && (
+                          <p className='assigned_to'><i>Assigned To:</i> {todo.user.name || 'Loading...'}</p>
+                        )}
+                    </div>
+                  <p className='text-center mb-3'>{todo.description}</p>
+                      <div className='d-flex justify-content-center'>
+                        <button onClick={() => this.deleteTodo(todo.id, todo.title)} className="delete-btn">delete</button>
+                        <button onClick={() => this.editTodo(todo.id)} className="edit-btn">edit</button>
+                      </div>
+                  </li>
+                  )).reverse(): null}
+              </ul>
+            </div>
+            <div>
+              <h2>IN PROGRESS</h2>
+                <ul className="list mb-1">
+                  {this.state.in_progress.length ? this.state.in_progress.map((todo, index) => (
+                    <li key={todo.id}>
+                    <div style={{gap: '50px'}} className='d-flex flex-row w-100 justify content-between'>
+                      <h1 className='todo-title'>
+                        {todo.title}
+                      </h1>
+                      {this.state.userRole==='super_admin' && 
+                      <div className='mb-2'>
+                        <i className='mr-1'>Set Progress: </i>
+                        {todo.progress > 0 &&                  
+                          <button type="button" onClick={() => this.setProgress('-', todo.id, todo.progress)}>{'<'}</button>
+                        }
+                        {todo.progress < 2 &&
+                          <button style={{marginLeft: '3px'}} type="button" onClick={() => this.setProgress('+', todo.id, todo.progress)}> {'>'} </button> 
+                        }
+                        <br></br>
+                        {
+                          todo.progress === 0 ? (
+                            <small className="badge badge-warning">BACKLOG</small>
+                          ) : todo.progress === 1 ? (
+                            <small className="badge badge-info">IN PROGRESS</small>
+                          ) : (
+                            <small className="badge badge-success">COMPLETED</small>
+                          )
+                        }
+                      </div>}
+                  </div>
+                    <div className="d-flex justify-content-between created-assigned">
+                      {todo.created_by && <p><i>Created By:</i> {todo.created_by}</p>}
+                      {todo.user && (
+                          <p className='assigned_to'><i>Assigned To:</i> {todo.user.name || 'Loading...'}</p>
+                        )}
+                    </div>
+                  <p className='text-center mb-3'>{todo.description}</p>
+                      <div className='d-flex justify-content-center'>
+                        <button onClick={() => this.deleteTodo(todo.id, todo.title)} className="delete-btn">delete</button>
+                        <button onClick={() => this.editTodo(todo.id)} className="edit-btn">edit</button>
+                      </div>
+                  </li>
+                  )).reverse(): null}
+              </ul>
+            </div>
+            <div>
+              <h2>COMPLETED</h2>
+                <ul className="list mb-1">
+                  {this.state.completed.length ? this.state.completed.map((todo, index) => (
+                    <li key={todo.id}>
+                    <div style={{gap: '50px'}} className='d-flex flex-row w-100 justify content-between'>
+                      <h1 className='todo-title'>
+                        {todo.title}
+                      </h1>
+                      {this.state.userRole==='super_admin' && 
+                      <div className='mb-2'>
+                        <i className='mr-1'>Set Progress: </i>
+                        {todo.progress > 0 &&                  
+                          <button type="button" onClick={() => this.setProgress('-', todo.id, todo.progress)}>{'<'}</button>
+                        }
+                        {todo.progress < 2 &&
+                          <button style={{marginLeft: '3px'}} type="button" onClick={() => this.setProgress('+', todo.id, todo.progress)}> {'>'} </button> 
+                        }
+                        <br></br>
+                        {
+                          todo.progress === 0 ? (
+                            <small className="badge badge-warning">BACKLOG</small>
+                          ) : todo.progress === 1 ? (
+                            <small className="badge badge-info">IN PROGRESS</small>
+                          ) : (
+                            <small className="badge badge-success">COMPLETED</small>
+                          )
+                        }
+                      </div>}
+                  </div>
+                    <div className="d-flex justify-content-between created-assigned">
+                      {todo.created_by && <p><i>Created By:</i> {todo.created_by}</p>}
+                      {todo.user && (
+                          <p className='assigned_to'><i>Assigned To:</i> {todo.user.name || 'Loading...'}</p>
+                        )}
+                    </div>
+                  <p className='text-center mb-3'>{todo.description}</p>
+                      <div className='d-flex justify-content-center'>
+                        <button onClick={() => this.deleteTodo(todo.id, todo.title)} className="delete-btn">delete</button>
+                        <button onClick={() => this.editTodo(todo.id)} className="edit-btn">edit</button>
+                      </div>
+                  </li>
+                  )).reverse(): null}
+              </ul>
+            </div>
+          </div>
           <Modal show={this.state.openModal} onHide={this.hideModal}>
           <Modal.Header style={{display: 'flex'}}>
               <button style={{cursor: 'pointer'}} className="close-modal-btn" onClick={this.hideModal}>X</button>

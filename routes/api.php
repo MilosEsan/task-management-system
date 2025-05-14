@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ToDoController;
+use Http\Middleware\CheckUser;
 
 
 
@@ -29,7 +30,7 @@ Route::get('/test-openai', [ToDoController::class, 'testAI']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     // todos
-    Route::get('todos', [ToDoController::class, 'index']);
+    Route::get('todos', [ToDoController::class, 'index'])->middleware('checkUser');
     Route::get('todos/{id}', [ToDoController::class, 'show']);
     Route::post('todos', [ToDoController::class, 'store']);
     Route::put('todos/{id}', [ToDoController::class, 'update']);
