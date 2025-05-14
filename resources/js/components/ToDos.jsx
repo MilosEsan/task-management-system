@@ -305,7 +305,7 @@ class Todos extends React.Component {
           </div>
           <div className='task_grid'>
             <div>
-              <h2>BACKLOG</h2>
+              <h2 className='text-warning'>BACKLOG</h2>
               <ul className="list mb-1">
                 {this.state.backlog.length ? this.state.backlog.map((todo, index) => (
                   <li key={todo.id}>
@@ -350,7 +350,7 @@ class Todos extends React.Component {
               </ul>
             </div>
             <div>
-              <h2>IN PROGRESS</h2>
+              <h2 className='text-info'>IN PROGRESS</h2>
                 <ul className="list mb-1">
                   {this.state.in_progress.length ? this.state.in_progress.map((todo, index) => (
                     <li key={todo.id}>
@@ -395,7 +395,7 @@ class Todos extends React.Component {
               </ul>
             </div>
             <div>
-              <h2>COMPLETED</h2>
+              <h2 className='text-success'>COMPLETED</h2>
                 <ul className="list mb-1">
                   {this.state.completed.length ? this.state.completed.map((todo, index) => (
                     <li key={todo.id}>
