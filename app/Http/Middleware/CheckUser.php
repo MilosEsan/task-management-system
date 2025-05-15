@@ -16,7 +16,6 @@ class CheckUser
     public function handle(Request $request, Closure $next): Response
     {
         $user = auth()->user();
-        \Log::info(auth()->user());
         if ($user && $user->name === 'Marko Polo') {
             return response()->json([
                 'message' => 'Hello, Marko. You are not allowed to access this resource.'
