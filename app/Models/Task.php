@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Todo extends Model
+class Task extends Model
 {
     protected $fillable = ['title', 'description', 'is_completed', 'progress', 'created_by', 'assigned_to'];
 
@@ -25,8 +25,8 @@ class Todo extends Model
     {
         parent::boot();
 
-        static::deleting(function ($todo) {
-            $todo->transactions()->delete();
+        static::deleting(function ($task) {
+            $task->transactions()->delete();
         });
     }
 }

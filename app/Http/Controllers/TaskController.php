@@ -2,48 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ToDoRequest;
-use App\Services\ToDoService;
+use App\Http\Requests\TaskRequest;
+use App\Services\TaskService;
 use App\Notifications\PersonalizedNotification;
 use App\Services\NotificationService;
 
 
 use Illuminate\Support\Facades\Http;
 
-class ToDoController extends Controller
+class TaskController extends Controller
 {
-    protected $toDoService;
+    protected $taskService;
 
-    public function __construct(ToDoService $toDoService)
+    public function __construct(TaskService $taskService)
     {
-        $this->toDoService = $toDoService;
+        $this->taskService = $taskService;
     }
 
     public function index()
     {
-        return $this->toDoService->getAllTodos();
+        return $this->taskService->getAllTasks();
     }
 
     public function show($id)
     {
-        return $this->toDoService->getTodoById($id);
+        return $this->taskService->getTaskById($id);
     }
 
-    public function store(ToDoRequest $request)
+    public function store(TaskRequest $request)
     {
-        return $this->toDoService->createTodo($request->validated());
+        return $this->taskService->createTask($request->validated());
     }
 
-    public function update(ToDoRequest $request, $id)
+    public function update(TaskRequest $request, $id)
     {
-        return $this->toDoService->updateTodo($id, $request->validated());
+        return $this->taskService->updateTask($id, $request->validated());
     }
 
     public function delete($id)
     {
         return response()->json(
             ['message' => 'Deleted Successfully'], 
-            $this->toDoService->deleteTodo($id) ? 200 : 400
+            $this->taskService->deleteTask($id) ? 200 : 400
         );
     }
 

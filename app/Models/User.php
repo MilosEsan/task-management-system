@@ -24,9 +24,9 @@ class User extends Authenticatable
         'role'
     ];
 
-    public function todos()
+    public function tasks()
     {
-        return $this->hasMany(Todo::class, 'assigned_to');
+        return $this->hasMany(Task::class, 'assigned_to');
     }
 
     // transactions where this user helped (is from_user_id)

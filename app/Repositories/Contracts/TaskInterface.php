@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Contracts;
 
-interface ToDoInterface 
+interface TaskInterface 
 {
     public function getAll();
     public function findById($id);

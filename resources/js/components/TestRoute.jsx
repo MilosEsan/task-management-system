@@ -4,11 +4,11 @@ import Transaction from './Transaction'
 import Modal from "react-bootstrap/Modal";
 
 export default function TestRoute () {
-    const [todos, setTodos] = useState([]);
+    const [tasks, setTasks] = useState([]);
     const [openModal, setIsModalOpen] = useState(false);
 
-    const [todoName, setTodoName] = useState('')
-    const [todoDetails, setTodoDetails] = useState('')
+    const [taskName, setTaskName] = useState('')
+    const [taskDetails, setTaskDetails] = useState('')
 
     const showModal = () => {
       setIsModalOpen(true)
@@ -18,18 +18,18 @@ export default function TestRoute () {
       setIsModalOpen(false)
     };
 
-    const saveTodo = (e) => {
+    const saveTask = (e) => {
       e.preventDefault()
       let params = {
-        title: todoName,
-        description: todoDetails
+        title: taskName,
+        description: taskDetails
       }
       console.log(params)
-      axios.post('/api/todos/', 
+      axios.post('/api/tasks/', 
         params
       )
       .then(()=> {
-        getTodos()
+        getTasks()
         hideModal()
       })
       .catch(err=> {
@@ -37,26 +37,26 @@ export default function TestRoute () {
       })
     }
 
-    const deleteTodo = (id) => {
-      axios.delete('/api/todos/'+id)
+    const deleteTask = (id) => {
+      axios.delete('/api/tasks/'+id)
       .then(()=> {
-        getTodos()
+        getTasks()
       })
       .catch(err=> {
         console.log(err)
       })
     };
     
-    const getTodos = () => {
-      axios.get('/api/todos')
+    const getTasks = () => {
+      axios.get('/api/tasks')
       .then(res=> {
-        setTodos(res.data)
+        setTasks(res.data)
       })
     }
 
   useEffect(() => {
 
-    getTodos();
+    getTasks();
 
   }, []);
 

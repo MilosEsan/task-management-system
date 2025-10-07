@@ -25,7 +25,7 @@ class TransactionService
 
     private function getUserAndTaskData() {
         $users = \App\Models\User::all('name', 'id');
-        $tasks = \App\Models\ToDo::all('title', 'id');
+        $tasks = \App\Models\Task::all('title', 'id');
 
         return [
             'users'=> $users,

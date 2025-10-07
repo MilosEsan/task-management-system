@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddProgressToTodos extends Migration
+class AddCreatedByFieldInTasks extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddProgressToTodos extends Migration
      */
     public function up()
     {
-        Schema::table('todos', function (Blueprint $table) {
-            $table->integer('progress')->default(0);
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->string('created_by')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddProgressToTodos extends Migration
      */
     public function down()
     {
-        Schema::table('todos', function (Blueprint $table) {
-            $table->dropColumn('progress');
+        Schema::table('tasks', function (Blueprint $table) {
+            //
         });
     }
 }

@@ -3,7 +3,7 @@ import axios  from 'axios';
 import SweetAlert2 from 'react-sweetalert2';
 import Modal from "react-bootstrap/Modal";
 
-class Todos extends React.Component {
+class Tasks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,9 +13,9 @@ class Todos extends React.Component {
       editId: null,
       openModal: false,
       isEditing: false,
-      todoName: '',
+      taskName: '',
       assignedUser: null,
-      todoDetails: '',
+      taskDetails: '',
       error: '',
       record_count: 0,
       userRole: '',
@@ -24,13 +24,13 @@ class Todos extends React.Component {
     }
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
-    this.saveTodo = this.saveTodo.bind(this);
+    this.saveTask = this.saveTask.bind(this);
     this.saveEdit = this.saveEdit.bind(this);
     this.setProgress = this.setProgress.bind(this);
-    this.deleteTodo = this.deleteTodo.bind(this);
-    this.editTodo = this.editTodo.bind(this);
+    this.deleteTask = this.deleteTask.bind(this);
+    this.editTask = this.editTask.bind(this);
     this.assignUser = this.assignUser.bind(this);
-    this.getTodos = this.getTodos.bind(this);
+    this.getTasks = this.getTasks.bind(this);
     this.processPostRequest = this.processPostRequest.bind(this);
     this.setConfirmation = this.setConfirmation.bind(this);
   }
@@ -39,8 +39,8 @@ class Todos extends React.Component {
     this.setState({ openModal: true });
     if (!this.state.isEditing) {
       this.setState({
-        todoName: '',
-        todoDetails: '',
+        taskName: '',
+        taskDetails: '',
         assignedUser: null
       });
     }
@@ -48,7 +48,7 @@ class Todos extends React.Component {
 
   hideModal() {
     this.setState({ openModal: false });
-    if (this.state.editId) this.getTodos(null);
+    if (this.state.editId) this.getTasks(null);
     this.setState({
       isEditing: false,
       editId: null,
@@ -56,14 +56,14 @@ class Todos extends React.Component {
     });
   }
 
-  saveTodo(e) {
+  saveTask(e) {
     let params = {
-      title: this.state.todoName,
-      description: this.state.todoDetails,
+      title: this.state.taskName,
+      description: this.state.taskDetails,
       created_by: localStorage.getItem("user_name"),
       assigned_to: Number(e.target[0].value) !== 0 ? Number(e.target[0].value) : null
     }
-    axios.post('/api/todos/',
+    axios.post('/api/tasks/',
       params,
       {
         headers: {
@@ -73,7 +73,7 @@ class Todos extends React.Component {
       }
     )
     .then((response)=> {
-      this.getTodos(null);
+      this.getTasks(null);
       this.hideModal();
     })
     .catch(err=> {
@@ -82,10 +82,10 @@ class Todos extends React.Component {
   }
 
   saveEdit(e) {
-    axios.put('/api/todos/'+this.state.editId,
+    axios.put('/api/tasks/'+this.state.editId,
       {
-        "title": this.state.todoName,
-        "description": this.state.todoDetails
+        "title": this.state.taskName,
+        "description": this.state.taskDetails
       },
       {
         headers: {
@@ -113,7 +113,7 @@ class Todos extends React.Component {
       return;
     }
 
-    axios.put(`/api/todos/${id}`,
+    axios.put(`/api/tasks/${id}`,
       {
         progress: newCompleted,
       },
@@ -126,7 +126,7 @@ class Todos extends React.Component {
     )
     .then(()=> {
       setTimeout(() => {
-        this.getTodos(null);
+        this.getTasks(null);
       }, 100);
     })
     .catch((error) => {
@@ -134,7 +134,7 @@ class Todos extends React.Component {
     });
   }
 
-  deleteTodo(id, title) {
+  deleteTask(id, title) {
     this.setState({
       swal: {
         title: `Do you want to delete the task <b style="color: #b07e09">"${title}"</b>?`,
@@ -151,7 +151,7 @@ class Todos extends React.Component {
         },
         show: true,
         onConfirm: () => {
-          axios.delete('/api/todos/'+id,
+          axios.delete('/api/tasks/'+id,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -161,7 +161,7 @@ class Todos extends React.Component {
           )
           .then(res=> {
             this.hideModal();
-            this.getTodos(null);
+            this.getTasks(null);
 
             this.setConfirmation(`Task <b>"${title}"</b> deleted !`);
           })
@@ -174,18 +174,18 @@ class Todos extends React.Component {
     })
   }
 
-  editTodo(id) {
+  editTask(id) {
     this.setState(
       { editId: id, isEditing: true },
       () => {
         this.showModal();
-        this.getTodos(id);
+        this.getTasks(id);
       }
     );
   }
 
   assignUser(id, taskId) {
-    axios.put(`/api/todos/${taskId}`, {
+    axios.put(`/api/tasks/${taskId}`, {
       assigned_to: Number(id)
     },
     {
@@ -215,14 +215,14 @@ class Todos extends React.Component {
                 },
             }
         });
-        this.getTodos(taskId);
+        this.getTasks(taskId);
       })
     })
     .catch(error=> console.log(error))
   }
 
-  getTodos(id) {
-    axios.get(id ? `/api/todos/${id}` : '/api/todos',
+  getTasks(id) {
+    axios.get(id ? `/api/tasks/${id}` : '/api/tasks',
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -234,8 +234,8 @@ class Todos extends React.Component {
       console.log('res: ', res);
       if (id) {
         this.setState({
-          todoName: res.data.title,
-          todoDetails: res.data.description,
+          taskName: res.data.title,
+          taskDetails: res.data.description,
           assignedUser: res.data.user?.name || null
         });
       } else {
@@ -252,7 +252,7 @@ class Todos extends React.Component {
   processPostRequest(e) { 
     e.preventDefault();
     if (!this.state.editId) {
-      this.saveTodo(e);
+      this.saveTask(e);
     } else {
       setTimeout(() => {
         this.saveEdit(this.state.editId);
@@ -275,7 +275,7 @@ class Todos extends React.Component {
 
   componentDidMount() {
     this.setState({ userRole: localStorage.getItem('user_role') });
-    this.getTodos(null);
+    this.getTasks(null);
     
     if (localStorage.getItem('user_role')==='super_admin') {
       axios.get('/api/users', {
@@ -305,26 +305,26 @@ class Todos extends React.Component {
             <div>
               <h2 className='text-warning'>BACKLOG</h2>
               <ul className="list mb-1">
-                {this.state.backlog.length ? this.state.backlog.map((todo, index) => (
-                  <li key={todo.id}>
+                {this.state.backlog.length ? this.state.backlog.map((task, index) => (
+                  <li key={task.id}>
                   <div style={{gap: '50px'}} className='d-flex flex-row w-100 justify content-between'>
-                      <h1 className='todo-title'>
-                        {todo.title}
+                      <h1 className='task-title'>
+                        {task.title}
                       </h1>
                       {this.state.userRole==='super_admin' && 
                       <div className='mb-2'>
                         <i className='mr-1'>Set Progress: </i>
-                        {todo.progress > 0 &&                  
-                          <button type="button" onClick={() => this.setProgress('-', todo.id, todo.progress)}>{'<'}</button>
+                        {task.progress > 0 &&                  
+                          <button type="button" onClick={() => this.setProgress('-', task.id, task.progress)}>{'<'}</button>
                         }
-                        {todo.progress < 2 &&
-                          <button style={{marginLeft: '3px'}} type="button" onClick={() => this.setProgress('+', todo.id, todo.progress)}> {'>'} </button> 
+                        {task.progress < 2 &&
+                          <button style={{marginLeft: '3px'}} type="button" onClick={() => this.setProgress('+', task.id, task.progress)}> {'>'} </button> 
                         }
                         <br></br>
                         {
-                          todo.progress === 0 ? (
+                          task.progress === 0 ? (
                             <small className="badge badge-warning">BACKLOG</small>
-                          ) : todo.progress === 1 ? (
+                          ) : task.progress === 1 ? (
                             <small className="badge badge-info">IN PROGRESS</small>
                           ) : (
                             <small className="badge badge-success">COMPLETED</small>
@@ -333,15 +333,15 @@ class Todos extends React.Component {
                       </div>}
                   </div>
                     <div className="d-flex justify-content-between created-assigned">
-                      {todo.created_by && <p><i>Created By:</i> {todo.created_by}</p>}
-                      {todo.user && (
-                          <p className='assigned_to'><i>Assigned To:</i> {todo.user.name || 'Loading...'}</p>
+                      {task.created_by && <p><i>Created By:</i> {task.created_by}</p>}
+                      {task.user && (
+                          <p className='assigned_to'><i>Assigned To:</i> {task.user.name || 'Loading...'}</p>
                         )}
                     </div>
-                  <p className='text-center mb-3'>{todo.description}</p>
+                  <p className='text-center mb-3'>{task.description}</p>
                       <div className='d-flex justify-content-center'>
-                        <button onClick={() => this.deleteTodo(todo.id, todo.title)} className="delete-btn">delete</button>
-                        <button onClick={() => this.editTodo(todo.id)} className="edit-btn">edit</button>
+                        <button onClick={() => this.deleteTask(task.id, task.title)} className="delete-btn">delete</button>
+                        <button onClick={() => this.editTask(task.id)} className="edit-btn">edit</button>
                       </div>
                   </li>
                   )).reverse(): null}
@@ -350,26 +350,26 @@ class Todos extends React.Component {
             <div>
               <h2 className='text-info'>IN PROGRESS</h2>
                 <ul className="list mb-1">
-                  {this.state.in_progress.length ? this.state.in_progress.map((todo, index) => (
-                    <li key={todo.id}>
+                  {this.state.in_progress.length ? this.state.in_progress.map((task, index) => (
+                    <li key={task.id}>
                     <div style={{gap: '50px'}} className='d-flex flex-row w-100 justify content-between'>
-                      <h1 className='todo-title'>
-                        {todo.title}
+                      <h1 className='task-title'>
+                        {task.title}
                       </h1>
                       {this.state.userRole==='super_admin' && 
                       <div className='mb-2'>
                         <i className='mr-1'>Set Progress: </i>
-                        {todo.progress > 0 &&                  
-                          <button type="button" onClick={() => this.setProgress('-', todo.id, todo.progress)}>{'<'}</button>
+                        {task.progress > 0 &&                  
+                          <button type="button" onClick={() => this.setProgress('-', task.id, task.progress)}>{'<'}</button>
                         }
-                        {todo.progress < 2 &&
-                          <button style={{marginLeft: '3px'}} type="button" onClick={() => this.setProgress('+', todo.id, todo.progress)}> {'>'} </button> 
+                        {task.progress < 2 &&
+                          <button style={{marginLeft: '3px'}} type="button" onClick={() => this.setProgress('+', task.id, task.progress)}> {'>'} </button> 
                         }
                         <br></br>
                         {
-                          todo.progress === 0 ? (
+                          task.progress === 0 ? (
                             <small className="badge badge-warning">BACKLOG</small>
-                          ) : todo.progress === 1 ? (
+                          ) : task.progress === 1 ? (
                             <small className="badge badge-info">IN PROGRESS</small>
                           ) : (
                             <small className="badge badge-success">COMPLETED</small>
@@ -378,15 +378,15 @@ class Todos extends React.Component {
                       </div>}
                   </div>
                     <div className="d-flex justify-content-between created-assigned">
-                      {todo.created_by && <p><i>Created By:</i> {todo.created_by}</p>}
-                      {todo.user && (
-                          <p className='assigned_to'><i>Assigned To:</i> {todo.user.name || 'Loading...'}</p>
+                      {task.created_by && <p><i>Created By:</i> {task.created_by}</p>}
+                      {task.user && (
+                          <p className='assigned_to'><i>Assigned To:</i> {task.user.name || 'Loading...'}</p>
                         )}
                     </div>
-                  <p className='text-center mb-3'>{todo.description}</p>
+                  <p className='text-center mb-3'>{task.description}</p>
                       <div className='d-flex justify-content-center'>
-                        <button onClick={() => this.deleteTodo(todo.id, todo.title)} className="delete-btn">delete</button>
-                        <button onClick={() => this.editTodo(todo.id)} className="edit-btn">edit</button>
+                        <button onClick={() => this.deleteTask(task.id, task.title)} className="delete-btn">delete</button>
+                        <button onClick={() => this.editTask(task.id)} className="edit-btn">edit</button>
                       </div>
                   </li>
                   )).reverse(): null}
@@ -395,26 +395,26 @@ class Todos extends React.Component {
             <div>
               <h2 className='text-success'>COMPLETED</h2>
                 <ul className="list mb-1">
-                  {this.state.completed.length ? this.state.completed.map((todo, index) => (
-                    <li key={todo.id}>
+                  {this.state.completed.length ? this.state.completed.map((task, index) => (
+                    <li key={task.id}>
                     <div style={{gap: '50px'}} className='d-flex flex-row w-100 justify content-between'>
-                      <h1 className='todo-title'>
-                        {todo.title}
+                      <h1 className='task-title'>
+                        {task.title}
                       </h1>
                       {this.state.userRole==='super_admin' && 
                       <div className='mb-2'>
                         <i className='mr-1'>Set Progress: </i>
-                        {todo.progress > 0 &&                  
-                          <button type="button" onClick={() => this.setProgress('-', todo.id, todo.progress)}>{'<'}</button>
+                        {task.progress > 0 &&                  
+                          <button type="button" onClick={() => this.setProgress('-', task.id, task.progress)}>{'<'}</button>
                         }
-                        {todo.progress < 2 &&
-                          <button style={{marginLeft: '3px'}} type="button" onClick={() => this.setProgress('+', todo.id, todo.progress)}> {'>'} </button> 
+                        {task.progress < 2 &&
+                          <button style={{marginLeft: '3px'}} type="button" onClick={() => this.setProgress('+', task.id, task.progress)}> {'>'} </button> 
                         }
                         <br></br>
                         {
-                          todo.progress === 0 ? (
+                          task.progress === 0 ? (
                             <small className="badge badge-warning">BACKLOG</small>
-                          ) : todo.progress === 1 ? (
+                          ) : task.progress === 1 ? (
                             <small className="badge badge-info">IN PROGRESS</small>
                           ) : (
                             <small className="badge badge-success">COMPLETED</small>
@@ -423,15 +423,15 @@ class Todos extends React.Component {
                       </div>}
                   </div>
                     <div className="d-flex justify-content-between created-assigned">
-                      {todo.created_by && <p><i>Created By:</i> {todo.created_by}</p>}
-                      {todo.user && (
-                          <p className='assigned_to'><i>Assigned To:</i> {todo.user.name || 'Loading...'}</p>
+                      {task.created_by && <p><i>Created By:</i> {task.created_by}</p>}
+                      {task.user && (
+                          <p className='assigned_to'><i>Assigned To:</i> {task.user.name || 'Loading...'}</p>
                         )}
                     </div>
-                  <p className='text-center mb-3'>{todo.description}</p>
+                  <p className='text-center mb-3'>{task.description}</p>
                       <div className='d-flex justify-content-center'>
-                        <button onClick={() => this.deleteTodo(todo.id, todo.title)} className="delete-btn">delete</button>
-                        <button onClick={() => this.editTodo(todo.id)} className="edit-btn">edit</button>
+                        <button onClick={() => this.deleteTask(task.id, task.title)} className="delete-btn">delete</button>
+                        <button onClick={() => this.editTask(task.id)} className="edit-btn">edit</button>
                       </div>
                   </li>
                   )).reverse(): null}
@@ -476,9 +476,9 @@ class Todos extends React.Component {
                     <input
                       type="text"
                       className="form-control"
-                      id="todo_name"
-                      onChange={(e) => this.setState({ todoName: e.target.value})}
-                      value={this.state.todoName ?? ''}
+                      id="task_name"
+                      onChange={(e) => this.setState({ taskName: e.target.value})}
+                      value={this.state.taskName ?? ''}
                     />
                   </div>
                   <div className="form-group mb-5 fg-fix">
@@ -487,8 +487,8 @@ class Todos extends React.Component {
                       rows="6"
                       className="form-control"
                       id="message-text"
-                      onChange={(e) => this.setState({ todoDetails: e.target.value})}
-                      value={this.state.todoDetails ?? ''}
+                      onChange={(e) => this.setState({ taskDetails: e.target.value})}
+                      value={this.state.taskDetails ?? ''}
                     />
                   </div>
 
@@ -512,4 +512,4 @@ class Todos extends React.Component {
   }
 }
 
-export default Todos;
+export default Tasks;

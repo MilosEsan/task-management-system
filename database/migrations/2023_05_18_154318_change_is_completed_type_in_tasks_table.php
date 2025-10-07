@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeIsCompletedTypeInTodosTable extends Migration
+class ChangeIsCompletedTypeInTasksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class ChangeIsCompletedTypeInTodosTable extends Migration
      */
     public function up()
     {
-        Schema::table('todos', function (Blueprint $table) {
+        Schema::table('tasks', function (Blueprint $table) {
             $table->dropColumn('is_completed');
             $table->boolean('is_completed')->default(0);
         });
@@ -26,7 +26,7 @@ class ChangeIsCompletedTypeInTodosTable extends Migration
      */
     public function down()
     {
-        Schema::table('todos', function (Blueprint $table) {
+        Schema::table('tasks', function (Blueprint $table) {
             $table->dropColumn('is_completed_int');
             $table->boolean('is_completed')->default(0);
         });

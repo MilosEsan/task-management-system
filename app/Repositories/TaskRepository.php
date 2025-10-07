@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Models\Todo;
-use App\Repositories\Contracts\ToDoInterface;
+use App\Models\Task;
+use App\Repositories\Contracts\TaskInterface;
 use Illuminate\Support\Facades\DB;
 
-class ToDoRepository implements ToDoInterface
+class TaskRepository implements TaskInterface
 {
     public function getAll()
     {
@@ -18,7 +18,7 @@ class ToDoRepository implements ToDoInterface
         $result = [];
 
         foreach ($progress_stats as $key => $status) {
-            $result[$key] = Todo::with(['user:id,name', 'transactions:task_id,text,amount'])
+            $result[$key] = Task::with(['user:id,name', 'transactions:task_id,text,amount'])
             ->where('progress', $status)
             ->get();
         }
@@ -28,12 +28,12 @@ class ToDoRepository implements ToDoInterface
 
     public function findById($id)
     {
-        return Todo::with(['user:id,name', 'transactions:task_id,text,amount'])->find($id);
+        return Task::with(['user:id,name', 'transactions:task_id,text,amount'])->find($id);
     }
 
     public function countTodayRecords()
     {
-        return DB::table('todos')
+        return DB::table('tasks')
             ->where('created_at', '>=', now()->startOfDay())
             ->where('created_at', '<=', now()->endOfDay())
             ->count();
@@ -41,19 +41,19 @@ class ToDoRepository implements ToDoInterface
 
     public function create(array $data)
     {
-        return Todo::create($data);
+        return Task::create($data);
     }
 
     public function update($id, array $data)
     {
-        $todo = Todo::findOrFail($id);
-        $todo->update($data);
-        return $todo;
+        $task = Task::findOrFail($id);
+        $task->update($data);
+        return $task;
     }
 
     public function delete($id)
     {
-        $todo = Todo::findOrFail($id);
-        return $todo->delete();
+        $task = Task::findOrFail($id);
+        return $task->delete();
     }
 }

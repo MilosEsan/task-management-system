@@ -18,4 +18,4 @@ Route::any( '{path}', function( $page ) {
      return view('welcome');
 });
 
-Route::redirect('/', '/todos', 301);
+Route::redirect('/', '/tasks', 301);

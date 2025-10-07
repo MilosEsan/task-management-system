@@ -11,7 +11,7 @@ class Transaction extends Model
 
     public function task()
     {
-        return $this->belongsTo(Todo::class, 'task_id');
+        return $this->belongsTo(Task::class, 'task_id');
     }
 
     public function fromUser() {

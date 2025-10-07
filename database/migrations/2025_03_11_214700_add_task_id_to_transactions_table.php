@@ -14,7 +14,7 @@ class AddTaskIdToTransactionsTable extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->foreignId('task_id')->nullable()->constrained('todos');
+            $table->foreignId('task_id')->nullable()->constrained('tasks');
         });
     }
 

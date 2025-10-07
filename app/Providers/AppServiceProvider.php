@@ -6,8 +6,8 @@ use Illuminate\Support\ServiceProvider;
 
 use App\Repositories\Contracts\UserInterface;
 use App\Repositories\UserRepository;
-use App\Repositories\Contracts\ToDoInterface;
-use App\Repositories\ToDoRepository;
+use App\Repositories\Contracts\TaskInterface;
+use App\Repositories\TaskRepository;
 use App\Repositories\Contracts\TransactionInterface;
 use App\Repositories\TransactionRepository;
 
@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(UserInterface::class, UserRepository::class);
-        $this->app->bind(ToDoInterface::class, ToDoRepository::class);
+        $this->app->bind(TaskInterface::class, TaskRepository::class);
         $this->app->bind(TransactionInterface::class, TransactionRepository::class);
     }
 

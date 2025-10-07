@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react'
 import { TransactionList } from './components/TransactionList';
 import { Login } from './components/auth/Login';
 import { AddTransaction } from './components/AddTransaction';
-import  ToDos  from './components/ToDos';
+import  Tasks  from './components/Tasks';
 import { Users } from './components/Users';
 
 
@@ -43,11 +43,11 @@ function App() {
         <div className='container w-100' id='app-container' style={{ margin: 0, maxWidth: '100%', padding: '100px 0px 30px 0px', paddingBottom: '30px' }}>
           {token && <Header onLogout={handleLogout} />}
           <Routes>
-                <Route path="/todos" element={token ?<ToDos /> : <Navigate to='/login'/>} />
+                <Route path="/tasks" element={token ?<Tasks /> : <Navigate to='/login'/>} />
                 <Route path="/add-transaction" element={token ? <AddTransaction /> : <Navigate to='/login'/>} />
                 <Route path="/transactions" element={token ? <TransactionList /> : <Navigate to='/login'/>} />
                 <Route path="/users" element={token ? <Users /> : <Navigate to='/login'/>} />
-                <Route path='/login' element={token ? <Navigate to='/todos'/> : <Login onLogin={handleLogin}/>}/>
+                <Route path='/login' element={token ? <Navigate to='/tasks'/> : <Login onLogin={handleLogin}/>}/>
           </Routes>
         </div>
     </Router>

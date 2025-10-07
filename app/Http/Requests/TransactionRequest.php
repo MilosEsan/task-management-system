@@ -16,7 +16,7 @@ class TransactionRequest extends FormRequest
         return [
             'text' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
-            'task_id' => 'required|exists:todos,id',
+            'task_id' => 'required|exists:tasks,id',
             'from_user_id' => 'required|exists:users,id',
             'to_user_id' => 'nullable|exists:users,id',
         ];

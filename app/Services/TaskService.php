@@ -2,52 +2,52 @@
 
 namespace App\Services;
 
-use App\Repositories\Contracts\ToDoInterface;
+use App\Repositories\Contracts\TaskInterface;
 use Illuminate\Support\Facades\Log;
 use App\Notifications\PersonalizedNotification;
 use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
-use App\Models\Todo;
+use App\Models\Task;
 use App\Models\User;
 
-class ToDoService
+class TaskService
 {
-    protected $toDoRepository;
+    protected $taskRepository;
 
-    public function __construct(ToDoInterface $toDoRepository, NotificationService $notificationService)
+    public function __construct(TaskInterface $taskRepository, NotificationService $notificationService)
     {
-        $this->toDoRepository = $toDoRepository;
+        $this->taskRepository = $taskRepository;
         $this->notificationService = $notificationService;
     }
 
-    public function getAllTodos()
+    public function getAllTasks()
     {
         return response()->json([
-            'record_count' => $this->toDoRepository->countTodayRecords(),
+            'record_count' => $this->taskRepository->countTodayRecords(),
             'user'         => auth()->user()->id,
-            'backlog'      => $this->toDoRepository->getAll()['backlog'],
-            'in_progress'  => $this->toDoRepository->getAll()['in_progress'],
-            'completed'    => $this->toDoRepository->getAll()['completed'],
+            'backlog'      => $this->taskRepository->getAll()['backlog'],
+            'in_progress'  => $this->taskRepository->getAll()['in_progress'],
+            'completed'    => $this->taskRepository->getAll()['completed'],
             'date'         => now()->format('Y-m-d H:i:s'),
         ]);
     }
 
-    public function getTodoById($id)
+    public function getTaskById($id)
     {
-        return $this->toDoRepository->findById($id);
+        return $this->taskRepository->findById($id);
     }
 
-    public function createTodo(array $data)
+    public function createTask(array $data)
     {
-        $recordCount = $this->toDoRepository->countTodayRecords();
+        $recordCount = $this->taskRepository->countTodayRecords();
 
         if ($recordCount <= 20) {
             try {
-                $this->toDoRepository->create($data);
-                return response()->json(['message' => 'ToDo Created Successfully!!']);
+                $this->taskRepository->create($data);
+                return response()->json(['message' => 'task Created Successfully!!']);
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
-                return response()->json(['message' => 'Something went wrong while creating a ToDo!'], 500);
+                return response()->json(['message' => 'Something went wrong while creating a task!'], 500);
             }
         }
 
@@ -56,20 +56,20 @@ class ToDoService
         ], 422);
     }
 
-    public function updateTodo($id, array $data)
+    public function updateTask($id, array $data)
     {
-        $task_name = Todo::where('id', $id)->get(['title']);
+        $task_name = Task::where('id', $id)->get(['title']);
         $task_name = $task_name[0]->title;
         if (isset($data['progress']) && $data['progress'] == 2) {
-            $this->toDoRepository->update($id, $data);
+            $this->taskRepository->update($id, $data);
             return $this->completeTask($id, $task_name);
         }
-        return $this->toDoRepository->update($id, $data);
+        return $this->taskRepository->update($id, $data);
     }
 
-    public function deleteTodo($id)
+    public function deleteTask($id)
     {
-        return $this->toDoRepository->delete($id);
+        return $this->taskRepository->delete($id);
     }
 
     private function completeTask($taskId, string $taskName)

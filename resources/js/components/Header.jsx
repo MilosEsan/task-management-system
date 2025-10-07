@@ -6,7 +6,6 @@ class Header extends Component {
   constructor(props) {
     super(props);
 
-    // Bindovanje metode logout
     this.logout = this.logout.bind(this);
 
     // State nije potreban jer ne koristimo lokalno stanje u ovoj komponenti
@@ -23,12 +22,11 @@ class Header extends Component {
   logout() {
     axios.post('/api/logout')
       .then(() => {
-        this.props.onLogout(); // Poziv funkcije onLogout iz props-a
+        this.props.onLogout(); 
         console.log('logged out successfully');
         localStorage.removeItem('token');
       })
       .catch(err => console.log(err));
-    // Ovde možete obaviti dodatne radnje nakon odjavljivanja
   }
 
   render() {
@@ -38,7 +36,7 @@ class Header extends Component {
       <header className='mb-5 w-100 d-flex justify-content-around'>
         <div style={{ marginRight: 'auto' }}>
           <Link to={'/users'}>Users</Link>
-          <Link style={{ marginLeft: '30px' }} to={'/todos'}>Todos</Link>
+          <Link style={{ marginLeft: '30px' }} to={'/tasks'}>Tasks</Link>
           <Link style={{ marginLeft: '30px' }} to={'/transactions'}>Transactions</Link>
         </div>
         <h2>

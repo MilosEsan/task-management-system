@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTodosTable extends Migration
+class AddProgressToTasks extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateTodosTable extends Migration
      */
     public function up()
     {
-        Schema::create('todos', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->text('description');
-            $table->string('title');
-            $table->integer('is_completed')->default(0)->change();        
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->integer('progress')->default(0);
         });
     }
 
@@ -29,6 +25,8 @@ class CreateTodosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('todos');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropColumn('progress');
+        });
     }
 }

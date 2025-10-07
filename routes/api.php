@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 // controllers
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ToDoController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TransactionController;
 
 use Http\Middleware\CheckUser;
@@ -28,12 +28,12 @@ use Http\Middleware\CheckUser;
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    // todos
-    Route::get('todos', [ToDoController::class, 'index'])->middleware('checkUser');
-    Route::get('todos/{id}', [ToDoController::class, 'show']);
-    Route::post('todos', [ToDoController::class, 'store']);
-    Route::put('todos/{id}', [ToDoController::class, 'update']);
-    Route::delete('todos/{id}', [ToDoController::class, 'delete']);
+    // tasks
+    Route::get('tasks', [TaskController::class, 'index'])->middleware('checkUser');
+    Route::get('tasks/{id}', [TaskController::class, 'show']);
+    Route::post('tasks', [TaskController::class, 'store']);
+    Route::put('tasks/{id}', [TaskController::class, 'update']);
+    Route::delete('tasks/{id}', [TaskController::class, 'delete']);
     // transactions
     Route::get('transactions', [TransactionController::class, 'index']);
     Route::get('transactions/{id}', 'TransactionController@show');

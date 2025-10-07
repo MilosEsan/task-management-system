@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAssignedToToTodosTable extends Migration
+class AddAssignedToTasksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddAssignedToToTodosTable extends Migration
      */
     public function up()
     {
-        Schema::table('todos', function (Blueprint $table) {
+        Schema::table('tasks', function (Blueprint $table) {
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
         });
     }
@@ -25,7 +25,7 @@ class AddAssignedToToTodosTable extends Migration
      */
     public function down()
     {
-        Schema::table('todos', function (Blueprint $table) {
+        Schema::table('tasks', function (Blueprint $table) {
             $table->dropColumn('assigned_to');
         });
     }
