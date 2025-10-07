@@ -33,13 +33,13 @@ export class Users extends Component {
     render(){
         return (
             <div className='container'>
-                {/* <button onClick={login} className='btn btn-light'>Login</button> */}
                 <table className="table">
                     <thead className="thead-dark">
                         <tr>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Date Added</th>
+                            <th>Available Funds</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,6 +50,7 @@ export class Users extends Component {
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
                                         <td>{user.created_at}</td>
+                                        <td>{user.balance} EUR</td>
                                     </tr>
                                 )
                             )

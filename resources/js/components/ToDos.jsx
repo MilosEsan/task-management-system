@@ -233,14 +233,12 @@ class Todos extends React.Component {
     .then(res=> {
       console.log('res: ', res);
       if (id) {
-        // edit case: popuni polja (samo za in_progress)
         this.setState({
           todoName: res.data.title,
           todoDetails: res.data.description,
           assignedUser: res.data.user?.name || null
         });
       } else {
-        // list case
         this.setState({
           backlog: res.data.backlog,
           in_progress: res.data.in_progress,

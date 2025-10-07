@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -9,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ToDoController;
+use App\Http\Controllers\TransactionController;
+
 use Http\Middleware\CheckUser;
 
 
@@ -24,8 +24,7 @@ use Http\Middleware\CheckUser;
 |
 */
 
-Route::post('user/create', 'UserController@create');
-Route::get('/test-openai', [ToDoController::class, 'testAI']);
+    Route::post('users/create', [UserController::class, 'create' ]);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -36,9 +35,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('todos/{id}', [ToDoController::class, 'update']);
     Route::delete('todos/{id}', [ToDoController::class, 'delete']);
     // transactions
-    Route::get('transactions', 'TransactionController@index');
+    Route::get('transactions', [TransactionController::class, 'index']);
     Route::get('transactions/{id}', 'TransactionController@show');
-    Route::post('transactions', 'TransactionController@store');
+    Route::post('transactions', [TransactionController::class, 'store']);
     Route::put('transactions/{id}', 'TransactionController@update');
     Route::delete('transactions/{id}', 'TransactionController@delete');
     // users

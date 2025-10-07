@@ -29,6 +29,22 @@ class User extends Authenticatable
         return $this->hasMany(Todo::class, 'assigned_to');
     }
 
+    // transactions where this user helped (is from_user_id)
+    public function helpedTransactions()
+    {
+        return $this->belongsToMany(Transaction::class, 'task_transaction_user', 'from_user_id', 'transaction_id')
+                    ->withPivot('task_id', 'to_user_id')
+                    ->withTimestamps();
+    }
+
+    // transactions where this user received help (is to_user_id)
+    public function receivedTransactions()
+    {
+        return $this->belongsToMany(Transaction::class, 'task_transaction_user', 'to_user_id', 'transaction_id')
+                    ->withPivot('task_id', 'from_user_id')
+                    ->withTimestamps();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

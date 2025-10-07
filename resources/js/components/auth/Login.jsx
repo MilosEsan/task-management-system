@@ -25,6 +25,7 @@ function login(e) {
       props.onLogin(token) 
       localStorage.setItem('user_name', response.data.user.name)
       localStorage.setItem('user_role', response.data.user.role)
+      localStorage.setItem('uid', response.data.user.id)
     })
     .catch(err=> {
       console.error(err)
@@ -44,7 +45,7 @@ function login(e) {
     formData.append('password', e.target[3].value)
 
     if (validateUsersCreation(e.target[2].value, e.target[3].value)) {
-      axios.post('/api/user/create', formData) 
+      axios.post('/api/users/create', formData) 
       .then(alert(`User ${e.target[0].value} created successfully`))
       .catch(err=> console.error(err))
     } 
