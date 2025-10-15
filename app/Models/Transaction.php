@@ -14,6 +14,10 @@ class Transaction extends Model
         return $this->belongsTo(Task::class, 'task_id');
     }
 
+    public function a_log() {
+        return $this->hasMany(AuditLog::class, 'transaction_id');
+    }
+
     public function fromUser() {
         return $this->belongsTo(User::class, 'from_user_id');
     }

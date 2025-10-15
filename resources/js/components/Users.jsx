@@ -1,28 +1,23 @@
 
 import React, { Component } from 'react';
+import {privateApi} from '../API/api';
 import axios from 'axios';
 
 export class Users extends Component {
   constructor(props) {
     super(props);
-    this.getUsers = this.getUsers.bind(this);
+    this.fetchUsers = this.fetchUsers.bind(this);
     this.state = {
       users: [],
     };
   }
 
   componentDidMount() {
-    this.getUsers();
+    this.fetchUsers();
   }
 
-  getUsers = () => {
-        axios.get('/api/users', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    
-            }
-        })
+  fetchUsers = () => {
+        privateApi.getUsers()
         .then(res=> {
             this.setState({
                 users: res.data

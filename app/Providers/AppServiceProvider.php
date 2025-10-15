@@ -11,6 +11,13 @@ use App\Repositories\TaskRepository;
 use App\Repositories\Contracts\TransactionInterface;
 use App\Repositories\TransactionRepository;
 
+use App\Models\Task;
+use App\Models\Transaction;
+use App\Models\User;
+
+use App\Observers\AuditLogObserver;
+
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -21,6 +28,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserInterface::class, UserRepository::class);
         $this->app->bind(TaskInterface::class, TaskRepository::class);
         $this->app->bind(TransactionInterface::class, TransactionRepository::class);
+
+        // audit observer
+
     }
 
     /**
@@ -28,6 +38,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Task::observe(AuditLogObserver::class);
+        Transaction::observe(AuditLogObserver::class);
+        User::observe(AuditLogObserver::class);
     }
 }

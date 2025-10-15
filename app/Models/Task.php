@@ -20,13 +20,19 @@ class Task extends Model
         return $this->hasMany(Transaction::class, 'task_id');
     }
 
+    public function a_log() {
+        return $this->hasMany(AuditLog::class, 'task_id');
+    }
+
     // deleting parent records
     protected static function boot()
     {
         parent::boot();
 
         static::deleting(function ($task) {
-            $task->transactions()->delete();
+            foreach ($task->transactions()->get() as $tx) {
+                $tx->delete();
+            }
         });
     }
 }

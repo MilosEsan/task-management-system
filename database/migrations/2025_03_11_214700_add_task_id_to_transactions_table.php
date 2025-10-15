@@ -14,7 +14,10 @@ class AddTaskIdToTransactionsTable extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->foreignId('task_id')->nullable()->constrained('tasks');
+            $table->foreignId('task_id')
+                ->nullable()
+                ->constrained('tasks')
+                ->nullOnDelete(); // postavi task_id na NULL kada se task obriše
         });
     }
 
@@ -26,7 +29,9 @@ class AddTaskIdToTransactionsTable extends Migration
     public function down()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->dropColumn('task_id');
+            $table->foreignId('task_id')->nullable();
+            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('set null');
+
         });
     }
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { publicApi } from '../../API/api';
 import Modal from "react-bootstrap/Modal";
 
 
@@ -19,7 +20,7 @@ function login(e) {
       email: email,
       password: password
     }
-    axios.post(`/api/login`, params)
+    publicApi.login(params.email, params.password)
     .then(response=> {
       let token = localStorage.setItem('token', response.data.token);
       props.onLogin(token) 
@@ -45,7 +46,7 @@ function login(e) {
     formData.append('password', e.target[3].value)
 
     if (validateUsersCreation(e.target[2].value, e.target[3].value)) {
-      axios.post('/api/users/create', formData) 
+      publicApi.signUp(formData) 
       .then(alert(`User ${e.target[0].value} created successfully`))
       .catch(err=> console.error(err))
     } 

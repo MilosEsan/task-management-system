@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, useLocation } from "react-router-dom";
+import { privateApi } from '../API/api';
 import axios from 'axios';
 
 class Header extends Component {
@@ -8,7 +9,6 @@ class Header extends Component {
 
     this.logout = this.logout.bind(this);
 
-    // State nije potreban jer ne koristimo lokalno stanje u ovoj komponenti
   }
 
   componentDidMount() {
@@ -20,10 +20,10 @@ class Header extends Component {
   }
 
   logout() {
-    axios.post('/api/logout')
+    privateApi.logout()
       .then(() => {
         this.props.onLogout(); 
-        console.log('logged out successfully');
+        console.log('logged out successfully -> status: ok');
         localStorage.removeItem('token');
       })
       .catch(err => console.log(err));

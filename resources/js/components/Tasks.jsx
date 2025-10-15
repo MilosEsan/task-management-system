@@ -2,6 +2,7 @@ import React from 'react';
 import axios  from 'axios';
 import SweetAlert2 from 'react-sweetalert2';
 import Modal from "react-bootstrap/Modal";
+import {privateApi} from '../API/api';
 
 class Tasks extends React.Component {
   constructor(props) {
@@ -48,7 +49,7 @@ class Tasks extends React.Component {
 
   hideModal() {
     this.setState({ openModal: false });
-    if (this.state.editId) this.getTasks(null);
+    if (this.state.editId) this.getTasks();
     this.setState({
       isEditing: false,
       editId: null,
@@ -63,17 +64,9 @@ class Tasks extends React.Component {
       created_by: localStorage.getItem("user_name"),
       assigned_to: Number(e.target[0].value) !== 0 ? Number(e.target[0].value) : null
     }
-    axios.post('/api/tasks/',
-      params,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-      }
-    )
+    privateApi.createTask(params)
     .then((response)=> {
-      this.getTasks(null);
+      this.getTasks();
       this.hideModal();
     })
     .catch(err=> {
@@ -82,17 +75,11 @@ class Tasks extends React.Component {
   }
 
   saveEdit(e) {
-    axios.put('/api/tasks/'+this.state.editId,
+    privateApi.updateTask(this.state.editId,
       {
         "title": this.state.taskName,
         "description": this.state.taskDetails
       },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-      }
     )
     .then(res=> {
       this.hideModal();
@@ -113,20 +100,14 @@ class Tasks extends React.Component {
       return;
     }
 
-    axios.put(`/api/tasks/${id}`,
+    privateApi.updateTask(id,
       {
         progress: newCompleted,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
       }
     )
     .then(()=> {
       setTimeout(() => {
-        this.getTasks(null);
+        this.getTasks();
       }, 100);
     })
     .catch((error) => {
@@ -151,17 +132,10 @@ class Tasks extends React.Component {
         },
         show: true,
         onConfirm: () => {
-          axios.delete('/api/tasks/'+id,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-              }
-            }
-          )
+          privateApi.deleteTask(id)
           .then(res=> {
             this.hideModal();
-            this.getTasks(null);
+            this.getTasks();
 
             this.setConfirmation(`Task <b>"${title}"</b> deleted !`);
           })
@@ -184,55 +158,37 @@ class Tasks extends React.Component {
     );
   }
 
-  assignUser(id, taskId) {
-    axios.put(`/api/tasks/${taskId}`, {
-      assigned_to: Number(id)
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      }
-    }
-  )
+  assignUser(userId, taskId) {
+    privateApi.updateTask(taskId, {
+      assigned_to: Number(userId)
+    })
     .then(()=> {
-      fetch('/api/users/'+Number(id), {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-      })
-      .then(res=> res.json())
-      .then(data=> {
+      privateApi.getUsers(userId)
+        .then(data=> {
+          console.log("assignee :", data)
           this.setState({
             swal: {
                 show: true,
                 title: 'Task Reassigned',
-                text: `New assignee: ${data.name}`,
-                onConfirm: () => {
-                  this.setState({ swal: {} });
-                  this.hideModal();
-                },
-            }
-        });
+                text: `New assignee: ${data.data.name}`,
+                  onConfirm: () => {
+                    this.setState({ swal: {} });
+                    this.hideModal();
+                    },
+                }
+            });
         this.getTasks(taskId);
       })
     })
     .catch(error=> console.log(error))
   }
 
-  getTasks(id) {
-    axios.get(id ? `/api/tasks/${id}` : '/api/tasks',
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-      }
-    )
+  getTasks(id=null) {
+    privateApi.getTasks(id)
     .then(res=> {
       console.log('res: ', res);
       if (id) {
+        console.log('single task res 1: ', res);
         this.setState({
           taskName: res.data.title,
           taskDetails: res.data.description,
@@ -275,15 +231,10 @@ class Tasks extends React.Component {
 
   componentDidMount() {
     this.setState({ userRole: localStorage.getItem('user_role') });
-    this.getTasks(null);
+    this.getTasks();
     
     if (localStorage.getItem('user_role')==='super_admin') {
-      axios.get('/api/users', {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-      })
+      privateApi.getUsers()
       .then((res)=> {
         this.setState({ users: res.data });
       })

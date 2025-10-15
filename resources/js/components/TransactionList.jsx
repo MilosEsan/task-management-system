@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { privateApi } from '../API/api';
 import axios from 'axios';
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -8,22 +9,15 @@ export const TransactionList = () => {
   const [users, setUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
   const getTransactions = () => {
-    axios.get('/api/transactions',
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      }
-    ) 
-    .then(response=> {
-      setUsers(response.data.connected_data.users)
-      setTasks(response.data.connected_data.tasks)
-      setTransactions(response.data.transactions);
-    })
-    .then(()=>       console.log(transactions)
-);
+    privateApi.getTransactions()
+        .then(response=> {
+          setUsers(response.data.connected_data.users)
+          setTasks(response.data.connected_data.tasks)
+          setTransactions(response.data.transactions);
+        })
+        .then(()=>       console.log(transactions)
+    );
   }
 
   function createTransaction(e) {
@@ -34,22 +28,17 @@ export const TransactionList = () => {
     params.amount = Number(e.target[2].value) 
     params.text = e.target[3].value
     params.from_user_id = Number(localStorage.getItem('uid'))
-    axios.post('/api/transactions/',
-      params,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-      }
-    )
+    privateApi.createTransaction(params)
     .then((response)=> {
-      this.getTransactions();
-      // this.hideModal();
+      getTransactions();
+      hideModal();
     })
     .catch(err=> {
-      // this.setState({ error: err.response.data.message });
     })
+  }
+
+  function hideModal() {
+    setShowModal(false)
   }
 
   useEffect(()=> {
@@ -130,12 +119,12 @@ export const TransactionList = () => {
                                         <td>{transaction.text}</td>
                                         <td>{transaction.amount}.00 EUR</td>
                                         <td className='text-success'>{transaction.task && transaction.task.title}</td>
-                                        <td>{transaction.senders.length && transaction.senders[0].name}</td>
+                                        <td style={{color: !transaction.senders.length && 'lightgray'}}>{transaction.senders.length && transaction.senders[0].name ? transaction.senders[0].name : 'N/A'}</td>
                                         <td style={{color: !transaction.recipients.length && 'lightgray'}}>{transaction.recipients.length && transaction.recipients[0].name ? transaction.recipients[0].name : 'N/A'}</td>
                                         <td>{transaction.created_at}</td>
                                     </tr>
                                 )
-                            )
+                            ).reverse()
                         }
                     </tbody>
                 </table>

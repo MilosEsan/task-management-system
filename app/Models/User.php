@@ -29,6 +29,10 @@ class User extends Authenticatable
         return $this->hasMany(Task::class, 'assigned_to');
     }
 
+    public function a_log() {
+        return $this->hasMany(AuditLog::class, 'user_id');
+    }
+
     // transactions where this user helped (is from_user_id)
     public function helpedTransactions()
     {
