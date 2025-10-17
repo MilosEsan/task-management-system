@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { privateApi } from '../API/api';
+import SweetAlert2 from 'react-sweetalert2';
 import axios from 'axios';
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import { CloseButton } from 'react-bootstrap';
 
 export const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
   const [users, setUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [swal, setSwal] = useState({})
+
+  const selectedTaskTitle = useRef(null)
   const getTransactions = () => {
     privateApi.getTransactions()
         .then(response=> {
@@ -31,9 +36,30 @@ export const TransactionList = () => {
     privateApi.createTransaction(params)
     .then((response)=> {
       getTransactions();
-      hideModal();
+            setSwal({
+              show: true,
+              showCloseButton: true,
+              title: 'Welcome!',
+              icon: 'success',
+              showConfirmButton: false,
+              text: `Transaction for 
+              "${selectedTaskTitle.current.selectedOptions[0].text}" 
+              created successfully`,
+            })
+
+          setTimeout(() => {
+            hideModal();
+          }, 1000);
     })
     .catch(err=> {
+        setSwal({
+          show: true,
+          showCloseButton: true,
+          title: 'Error',
+          icon: 'error',
+          showConfirmButton: false,
+          text: err.response.data.message,
+        })
     })
   }
 
@@ -54,7 +80,7 @@ export const TransactionList = () => {
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={e => createTransaction(e)}>
-            <select onChange={(e)=> {}} className="form-select mb-2" aria-label="Default select example">
+            <select ref={selectedTaskTitle} onChange={(e)=> {}} className="form-select mb-2" aria-label="Default select example">
                       <option value="" hidden>Assign To The Task</option>
                       {
                         tasks.map(task=>(
@@ -129,6 +155,10 @@ export const TransactionList = () => {
                     </tbody>
                 </table>
             </div>
+        <SweetAlert2 
+        {...swal}
+          didClose={() => setSwal({ show: false })}
+        />
     </>
   )
 }

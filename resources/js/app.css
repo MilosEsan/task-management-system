@@ -313,3 +313,7 @@ header > div > a {
 .task_grid > div > h2 {
   margin-bottom: 50px;
 }
+
+.btn-light {
+  border: 1px, solid gray !important;
+}

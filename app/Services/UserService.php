@@ -28,7 +28,7 @@ class UserService
     {
         try {
                 $this->userRepository->create($data);
-                return response()->json(['message' => 'User Created Successfully (from service)!!']);
+                return response()->json(['message' => 'User Created Successfully']);
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
                 return response()->json(['message' => 'Something went wrong while creating a user!'], 500);

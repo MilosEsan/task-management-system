@@ -54,7 +54,6 @@ class Header extends Component {
   }
 }
 
-// Funkcionalni wrapper za koristenje useLocation u klasi komponenti header
 const HeaderWithLocation = (props) => {
   const location = useLocation();
   return <Header {...props} location={location} />;
